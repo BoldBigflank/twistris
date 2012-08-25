@@ -7,6 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FA1BE53615E8416800B4DA6A /* GameOverScene.m in Sources */ = {isa = PBXBuildFile; fileRef = FA1BE53515E8416800B4DA6A /* GameOverScene.m */; };
+		FA1BE54D15E854D800B4DA6A /* copter@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA1BE54B15E854D800B4DA6A /* copter@2x.png */; };
+		FA1BE54E15E854D800B4DA6A /* copter.png in Resources */ = {isa = PBXBuildFile; fileRef = FA1BE54C15E854D800B4DA6A /* copter.png */; };
+		FA1BE55115E8550900B4DA6A /* cloud.png in Resources */ = {isa = PBXBuildFile; fileRef = FA1BE54F15E8550900B4DA6A /* cloud.png */; };
+		FA1BE55215E8550900B4DA6A /* cloud@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA1BE55015E8550900B4DA6A /* cloud@2x.png */; };
+		FA1BE55815E8618500B4DA6A /* RobotKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA1BE55615E8618500B4DA6A /* RobotKit.framework */; };
+		FA1BE55915E8618500B4DA6A /* RobotUIKit.bundle in Resources */ = {isa = PBXBuildFile; fileRef = FA1BE55715E8618500B4DA6A /* RobotUIKit.bundle */; };
+		FA1BE55B15E8619000B4DA6A /* RobotUIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA1BE55A15E8619000B4DA6A /* RobotUIKit.framework */; };
+		FA1BE56215E864B000B4DA6A /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA1BE56015E864B000B4DA6A /* CoreMotion.framework */; };
+		FA1BE56315E864B000B4DA6A /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA1BE56115E864B000B4DA6A /* ExternalAccessory.framework */; };
 		FA91B5D915CDCE8200C744B3 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA91B5D815CDCE8200C744B3 /* QuartzCore.framework */; };
 		FA91B5DB15CDCE8200C744B3 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA91B5DA15CDCE8200C744B3 /* OpenGLES.framework */; };
 		FA91B5DD15CDCE8200C744B3 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA91B5DC15CDCE8200C744B3 /* OpenAL.framework */; };
@@ -134,9 +144,24 @@
 		FA91B76915CDCE8400C744B3 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FA91B76815CDCE8400C744B3 /* AppDelegate.m */; };
 		FA91B76C15CDCE8400C744B3 /* HelloWorldLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = FA91B76B15CDCE8400C744B3 /* HelloWorldLayer.m */; };
 		FA91B76F15CDCE8400C744B3 /* IntroLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = FA91B76E15CDCE8400C744B3 /* IntroLayer.m */; };
+		FA91B77615CDD5D200C744B3 /* seeker.png in Resources */ = {isa = PBXBuildFile; fileRef = FA91B77515CDD5D200C744B3 /* seeker.png */; };
+		FAD64B8F15E5A04300BDDD04 /* SpriteCopter.m in Sources */ = {isa = PBXBuildFile; fileRef = FAD64B8E15E5A04300BDDD04 /* SpriteCopter.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		FA1BE53415E8416800B4DA6A /* GameOverScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameOverScene.h; sourceTree = "<group>"; };
+		FA1BE53515E8416800B4DA6A /* GameOverScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameOverScene.m; sourceTree = "<group>"; };
+		FA1BE54B15E854D800B4DA6A /* copter@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "copter@2x.png"; path = "Resources/copter@2x.png"; sourceTree = "<group>"; };
+		FA1BE54C15E854D800B4DA6A /* copter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = copter.png; path = Resources/copter.png; sourceTree = "<group>"; };
+		FA1BE54F15E8550900B4DA6A /* cloud.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = cloud.png; path = Resources/cloud.png; sourceTree = "<group>"; };
+		FA1BE55015E8550900B4DA6A /* cloud@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "cloud@2x.png"; path = "Resources/cloud@2x.png"; sourceTree = "<group>"; };
+		FA1BE55615E8618500B4DA6A /* RobotKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = RobotKit.framework; sourceTree = "<group>"; };
+		FA1BE55715E8618500B4DA6A /* RobotUIKit.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = RobotUIKit.bundle; sourceTree = "<group>"; };
+		FA1BE55A15E8619000B4DA6A /* RobotUIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = RobotUIKit.framework; sourceTree = "<group>"; };
+		FA1BE55C15E8648800B4DA6A /* ExternalAccessory.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExternalAccessory.framework; path = System/Library/Frameworks/ExternalAccessory.framework; sourceTree = SDKROOT; };
+		FA1BE55E15E8649100B4DA6A /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		FA1BE56015E864B000B4DA6A /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		FA1BE56115E864B000B4DA6A /* ExternalAccessory.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExternalAccessory.framework; path = System/Library/Frameworks/ExternalAccessory.framework; sourceTree = SDKROOT; };
 		FA91B5D415CDCE8200C744B3 /* bgmmo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = bgmmo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA91B5D815CDCE8200C744B3 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		FA91B5DA15CDCE8200C744B3 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -403,6 +428,9 @@
 		FA91B76B15CDCE8400C744B3 /* HelloWorldLayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HelloWorldLayer.m; sourceTree = "<group>"; };
 		FA91B76D15CDCE8400C744B3 /* IntroLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IntroLayer.h; sourceTree = "<group>"; };
 		FA91B76E15CDCE8400C744B3 /* IntroLayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IntroLayer.m; sourceTree = "<group>"; };
+		FA91B77515CDD5D200C744B3 /* seeker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = seeker.png; path = Resources/seeker.png; sourceTree = "<group>"; };
+		FAD64B8D15E5A04300BDDD04 /* SpriteCopter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpriteCopter.h; sourceTree = "<group>"; };
+		FAD64B8E15E5A04300BDDD04 /* SpriteCopter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpriteCopter.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -410,6 +438,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FA1BE56215E864B000B4DA6A /* CoreMotion.framework in Frameworks */,
+				FA1BE56315E864B000B4DA6A /* ExternalAccessory.framework in Frameworks */,
 				FA91B5D915CDCE8200C744B3 /* QuartzCore.framework in Frameworks */,
 				FA91B5DB15CDCE8200C744B3 /* OpenGLES.framework in Frameworks */,
 				FA91B5DD15CDCE8200C744B3 /* OpenAL.framework in Frameworks */,
@@ -419,6 +449,8 @@
 				FA91B5E515CDCE8200C744B3 /* Foundation.framework in Frameworks */,
 				FA91B5E715CDCE8200C744B3 /* CoreGraphics.framework in Frameworks */,
 				FA91B5E915CDCE8200C744B3 /* GameKit.framework in Frameworks */,
+				FA1BE55815E8618500B4DA6A /* RobotKit.framework in Frameworks */,
+				FA1BE55B15E8619000B4DA6A /* RobotUIKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -428,6 +460,8 @@
 		FA91B5C915CDCE8200C744B3 = {
 			isa = PBXGroup;
 			children = (
+				FA1BE55E15E8649100B4DA6A /* CoreMotion.framework */,
+				FA1BE55C15E8648800B4DA6A /* ExternalAccessory.framework */,
 				FA91B5EA15CDCE8200C744B3 /* bgmmo */,
 				FA91B5D715CDCE8200C744B3 /* Frameworks */,
 				FA91B5D515CDCE8200C744B3 /* Products */,
@@ -445,6 +479,11 @@
 		FA91B5D715CDCE8200C744B3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FA1BE56015E864B000B4DA6A /* CoreMotion.framework */,
+				FA1BE56115E864B000B4DA6A /* ExternalAccessory.framework */,
+				FA1BE55A15E8619000B4DA6A /* RobotUIKit.framework */,
+				FA1BE55615E8618500B4DA6A /* RobotKit.framework */,
+				FA1BE55715E8618500B4DA6A /* RobotUIKit.bundle */,
 				FA91B5D815CDCE8200C744B3 /* QuartzCore.framework */,
 				FA91B5DA15CDCE8200C744B3 /* OpenGLES.framework */,
 				FA91B5DC15CDCE8200C744B3 /* OpenAL.framework */,
@@ -465,6 +504,10 @@
 				FA91B76815CDCE8400C744B3 /* AppDelegate.m */,
 				FA91B76A15CDCE8400C744B3 /* HelloWorldLayer.h */,
 				FA91B76B15CDCE8400C744B3 /* HelloWorldLayer.m */,
+				FA1BE53415E8416800B4DA6A /* GameOverScene.h */,
+				FA1BE53515E8416800B4DA6A /* GameOverScene.m */,
+				FAD64B8D15E5A04300BDDD04 /* SpriteCopter.h */,
+				FAD64B8E15E5A04300BDDD04 /* SpriteCopter.m */,
 				FA91B76D15CDCE8400C744B3 /* IntroLayer.h */,
 				FA91B76E15CDCE8400C744B3 /* IntroLayer.m */,
 				FA91B5EB15CDCE8200C744B3 /* Resources */,
@@ -477,6 +520,11 @@
 		FA91B5EB15CDCE8200C744B3 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				FA1BE54F15E8550900B4DA6A /* cloud.png */,
+				FA1BE55015E8550900B4DA6A /* cloud@2x.png */,
+				FA1BE54B15E854D800B4DA6A /* copter@2x.png */,
+				FA1BE54C15E854D800B4DA6A /* copter.png */,
+				FA91B77515CDD5D200C744B3 /* seeker.png */,
 				FA91B5EC15CDCE8200C744B3 /* Default.png */,
 				FA91B5EE15CDCE8200C744B3 /* Default-Landscape~ipad.png */,
 				FA91B5F015CDCE8200C744B3 /* fps_images.png */,
@@ -904,6 +952,12 @@
 				FA91B60115CDCE8200C744B3 /* Icon@2x.png in Resources */,
 				FA91B60415CDCE8200C744B3 /* iTunesArtwork in Resources */,
 				FA91B74715CDCE8400C744B3 /* ChangeLog in Resources */,
+				FA91B77615CDD5D200C744B3 /* seeker.png in Resources */,
+				FA1BE54D15E854D800B4DA6A /* copter@2x.png in Resources */,
+				FA1BE54E15E854D800B4DA6A /* copter.png in Resources */,
+				FA1BE55115E8550900B4DA6A /* cloud.png in Resources */,
+				FA1BE55215E8550900B4DA6A /* cloud@2x.png in Resources */,
+				FA1BE55915E8618500B4DA6A /* RobotUIKit.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1019,6 +1073,8 @@
 				FA91B76915CDCE8400C744B3 /* AppDelegate.m in Sources */,
 				FA91B76C15CDCE8400C744B3 /* HelloWorldLayer.m in Sources */,
 				FA91B76F15CDCE8400C744B3 /* IntroLayer.m in Sources */,
+				FAD64B8F15E5A04300BDDD04 /* SpriteCopter.m in Sources */,
+				FA1BE53615E8416800B4DA6A /* GameOverScene.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1070,14 +1126,22 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/bgmmo\"",
+					"\"$(SRCROOT)\"",
+				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = bgmmo/Prefix.pch;
 				HEADER_SEARCH_PATHS = "\"bgmmo/libs/kazmath/include\"";
 				INFOPLIST_FILE = bgmmo/Resources/Info.plist;
 				OTHER_LDFLAGS = (
+					"-lstdc++",
 					"-lz",
+					"-all_load",
 					"-ObjC",
+					"-lsqlite3",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
@@ -1089,13 +1153,21 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/bgmmo\"",
+					"\"$(SRCROOT)\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = bgmmo/Prefix.pch;
 				HEADER_SEARCH_PATHS = "\"bgmmo/libs/kazmath/include\"";
 				INFOPLIST_FILE = bgmmo/Resources/Info.plist;
 				OTHER_LDFLAGS = (
+					"-lstdc++",
 					"-lz",
+					"-all_load",
 					"-ObjC",
+					"-lsqlite3",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				VALIDATE_PRODUCT = YES;
@@ -1122,6 +1194,7 @@
 				FA91B77415CDCE8400C744B3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

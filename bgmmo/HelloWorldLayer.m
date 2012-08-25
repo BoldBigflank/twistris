@@ -9,9 +9,19 @@
 
 // Import the interfaces
 #import "HelloWorldLayer.h"
+#import "CCTouchDispatcher.h"
+#import "SpriteCopter.h"
+#import "GameOverScene.h"
 
 // Needed to obtain the Navigation Controller
 #import "AppDelegate.h"
+
+Copter *seeker1;
+CCSprite *cocosGuy;
+CCSprite *cloud;
+
+int seekerDirection = -1;
+float score = 0;
 
 #pragma mark - HelloWorldLayer
 
@@ -37,71 +47,132 @@
 // on "init" you need to initialize your instance
 -(id) init
 {
+    _targets = [[NSMutableArray alloc] init];
+    
+    score = 0;
 	// always call "super" init
 	// Apple recommends to re-assign "self" with the "super's" return value
-	if( (self=[super init]) ) {
-		
-		// create and initialize a Label
-		CCLabelTTF *label = [CCLabelTTF labelWithString:@"Hello World" fontName:@"Marker Felt" fontSize:64];
+    // 91, 150, 239, 255
+    if( (self=[super initWithColor:ccc4(91, 150, 239, 255)] )) {
+        // A happy cloud
+        cloud = [CCSprite spriteWithFile: @"cloud.png"];
+        cloud.position = ccp( 700, 200 );
+        [self addChild:cloud];
 
-		// ask director for the window size
-		CGSize size = [[CCDirector sharedDirector] winSize];
-	
-		// position the label on the center of the screen
-		label.position =  ccp( size.width /2 , size.height/2 );
-		
-		// add the label as a child to this Layer
-		[self addChild: label];
-		
-		
-		
-		//
-		// Leaderboards and Achievements
-		//
-		
-		// Default font size will be 28 points.
-		[CCMenuItemFont setFontSize:28];
-		
-		// Achievement Menu Item using blocks
-		CCMenuItem *itemAchievement = [CCMenuItemFont itemWithString:@"Achievements" block:^(id sender) {
-			
-			
-			GKAchievementViewController *achivementViewController = [[GKAchievementViewController alloc] init];
-			achivementViewController.achievementDelegate = self;
-			
-			AppController *app = (AppController*) [[UIApplication sharedApplication] delegate];
-			
-			[[app navController] presentModalViewController:achivementViewController animated:YES];
-			
-			[achivementViewController release];
-		}
-									   ];
+        CGSize winSize = [[CCDirector sharedDirector] winSize];
+        int minY = cloud.contentSize.height/2;
+        int maxY = winSize.height - cloud.contentSize.height/2;
+        int rangeY = maxY - minY;
 
-		// Leaderboard Menu Item using blocks
-		CCMenuItem *itemLeaderboard = [CCMenuItemFont itemWithString:@"Leaderboard" block:^(id sender) {
-			
-			
-			GKLeaderboardViewController *leaderboardViewController = [[GKLeaderboardViewController alloc] init];
-			leaderboardViewController.leaderboardDelegate = self;
-			
-			AppController *app = (AppController*) [[UIApplication sharedApplication] delegate];
-			
-			[[app navController] presentModalViewController:leaderboardViewController animated:YES];
-			
-			[leaderboardViewController release];
-		}
-									   ];
-		
-		CCMenu *menu = [CCMenu menuWithItems:itemAchievement, itemLeaderboard, nil];
-		
-		[menu alignItemsHorizontallyWithPadding:20];
-		[menu setPosition:ccp( size.width/2, size.height/2 - 50)];
-		
-		// Add the menu to the layer
-		[self addChild:menu];
+        while([_targets count] < 3){
+            int actualY = (arc4random() % rangeY) + minY;    
+            CCSprite *cocosGuy = [CCSprite spriteWithFile: @"Icon.png"];
+            cocosGuy.position = ccp( winSize.width + cocosGuy.contentSize.width , actualY );
+            [self addChild:cocosGuy];
+            [_targets addObject:cocosGuy];
+        }
+		// do the same for our cocos2d guy, reusing the app icon as its image
+//        cocosGuy = [CCSprite spriteWithFile: @"Icon.png"];
+//        cocosGuy.position = ccp( 450, 300 );
+//        [self addChild:cocosGuy];
 
+        // create and initialize our seeker sprite, and add it to this layer
+        seeker1 = [Copter copter];
+        seeker1.position = ccp( 50, 100 );
+        [self addChild:seeker1];
+        
+
+        // schedule a repeating callback on every frame
+        [self schedule:@selector(nextFrame:)];
+        self.isTouchEnabled = YES;        
 	}
 	return self;
+}
+
+- (void) nextFrame:(ccTime)dt {
+    // Update the score
+    score += dt*10;
+    int vx = seeker1.vx + score/10;
+    
+    
+    // Send the cocos guy left
+    CGSize winSize = [[CCDirector sharedDirector] winSize];
+    int minY = cloud.contentSize.height/2;
+    int maxY = winSize.height - cloud.contentSize.height/2;
+    int rangeY = maxY - minY;
+
+
+
+    // Send the cloud guy left
+    cloud.position = ccp(cloud.position.x - vx * dt* .8 , cloud.position.y);
+    if(cloud.position.x < -1 * cloud.contentSize.width){
+        int actualY = (arc4random() % rangeY) + minY;
+        cloud.position = ccp(winSize.width + (cloud.contentSize.width/2), actualY);
+    }
+    
+    // Update the copter
+    seeker1.velocity = seeker1.velocity + (int)seeker1.acceleration*dt;
+    if (seeker1.velocity < -640) seeker1.velocity = -640;
+    seeker1.position = ccp( seeker1.position.x, seeker1.position.y + seeker1.velocity *dt);
+    if (seeker1.position.y < -32 ) {
+        seeker1.position = ccp( seeker1.position.x, winSize.height + seeker1.contentSize.height );
+    }
+    seeker1.rotation = 2 * M_PI * atan( -seeker1.velocity / vx);
+    
+    // Check for collisions
+    CGRect copterRect = CGRectMake(
+       seeker1.position.x - (seeker1.contentSize.width/2),
+       seeker1.position.y - (seeker1.contentSize.height/2),
+       seeker1.contentSize.width,
+       seeker1.contentSize.height);
+
+    for (CCSprite *cocosGuy in _targets) {
+        cocosGuy.position = ccp(cocosGuy.position.x - vx *dt, cocosGuy.position.y);
+        if(cocosGuy.position.x < -1 * cocosGuy.contentSize.width ){
+            int actualY = (arc4random() % rangeY) + minY;
+            cocosGuy.position = ccp(winSize.width + (cocosGuy.contentSize.width/2), actualY);
+        }
+        
+        CGRect cocosGuyRect = CGRectMake(
+            cocosGuy.position.x - (cocosGuy.contentSize.width/2),
+            cocosGuy.position.y - (cocosGuy.contentSize.height/2),
+            cocosGuy.contentSize.width,
+            cocosGuy.contentSize.height);
+        
+        if (CGRectIntersectsRect(copterRect, cocosGuyRect)) {
+            NSLog(@"COLLISION");
+            GameOverScene *gameOverScene = [GameOverScene node];
+            [gameOverScene.layer.label setString:[NSString stringWithFormat:@"Your Score: %i", (int)score]];
+            [[CCDirector sharedDirector] pushScene:gameOverScene];
+        }
+    }
+    
+
+    // Remove old blocks/dots
+    
+    // (occasionally) Add new blocks
+        // Narrow the gap
+        // Send them across the screen
+    // (occasionally) Dot the copter's path
+        // Send them across the screen
+    
+    
+}
+
+- (BOOL)ccTouchBegan:(UITouch *)touch withEvent:(UIEvent *)event {
+    // Reverse direction of the seeker
+    seeker1.acceleration = abs(seeker1.acceleration);
+    return YES;
+}
+
+- (void)ccTouchEnded:(UITouch *)touch withEvent:(UIEvent *)event {
+    // Return the direction of seeker
+    seeker1.acceleration = -1 * abs(seeker1.acceleration);
+}
+
+-(void) registerWithTouchDispatcher
+{
+	[[CCTouchDispatcher sharedDispatcher] addTargetedDelegate:self priority:0 swallowsTouches:YES];
 }
 
 // on "dealloc" you need to release all your retained objects
@@ -112,6 +183,8 @@
 	// cocos2d will automatically release all the children (Label)
 	
 	// don't forget to call "super dealloc"
+    [_targets release];
+    _targets = nil;
 	[super dealloc];
 }
 

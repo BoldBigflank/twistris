@@ -10,6 +10,7 @@
 // Import the interfaces
 #import "IntroLayer.h"
 #import "HelloWorldLayer.h"
+#import "GameOverScene.h"
 
 
 #pragma mark - IntroLayer
@@ -60,6 +61,8 @@
 
 -(void) makeTransition:(ccTime)dt
 {
-	[[CCDirector sharedDirector] replaceScene:[CCTransitionFade transitionWithDuration:1.0 scene:[HelloWorldLayer scene] withColor:ccWHITE]];
+    GameOverScene *gameOverScene = [GameOverScene node];
+    [gameOverScene.layer.label setString:@"Tap the screen to lift your copter"];
+	[[CCDirector sharedDirector] replaceScene:gameOverScene];
 }
 @end
