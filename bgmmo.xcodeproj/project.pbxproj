@@ -7,14 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FA08737715EAF6BF001ADBF4 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA08737615EAF6BF001ADBF4 /* Default@2x.png */; };
+		FA09AC6115E8C807004BBDBA /* RobotKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA09AC5F15E8C807004BBDBA /* RobotKit.framework */; };
+		FA09AC6215E8C807004BBDBA /* RobotUIKit.bundle in Resources */ = {isa = PBXBuildFile; fileRef = FA09AC6015E8C807004BBDBA /* RobotUIKit.bundle */; };
+		FA09AC6415E8C824004BBDBA /* RobotUIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA09AC6315E8C824004BBDBA /* RobotUIKit.framework */; };
 		FA1BE53615E8416800B4DA6A /* GameOverScene.m in Sources */ = {isa = PBXBuildFile; fileRef = FA1BE53515E8416800B4DA6A /* GameOverScene.m */; };
 		FA1BE54D15E854D800B4DA6A /* copter@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA1BE54B15E854D800B4DA6A /* copter@2x.png */; };
 		FA1BE54E15E854D800B4DA6A /* copter.png in Resources */ = {isa = PBXBuildFile; fileRef = FA1BE54C15E854D800B4DA6A /* copter.png */; };
 		FA1BE55115E8550900B4DA6A /* cloud.png in Resources */ = {isa = PBXBuildFile; fileRef = FA1BE54F15E8550900B4DA6A /* cloud.png */; };
 		FA1BE55215E8550900B4DA6A /* cloud@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA1BE55015E8550900B4DA6A /* cloud@2x.png */; };
-		FA1BE55815E8618500B4DA6A /* RobotKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA1BE55615E8618500B4DA6A /* RobotKit.framework */; };
-		FA1BE55915E8618500B4DA6A /* RobotUIKit.bundle in Resources */ = {isa = PBXBuildFile; fileRef = FA1BE55715E8618500B4DA6A /* RobotUIKit.bundle */; };
-		FA1BE55B15E8619000B4DA6A /* RobotUIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA1BE55A15E8619000B4DA6A /* RobotUIKit.framework */; };
 		FA1BE56215E864B000B4DA6A /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA1BE56015E864B000B4DA6A /* CoreMotion.framework */; };
 		FA1BE56315E864B000B4DA6A /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA1BE56115E864B000B4DA6A /* ExternalAccessory.framework */; };
 		FA91B5D915CDCE8200C744B3 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA91B5D815CDCE8200C744B3 /* QuartzCore.framework */; };
@@ -149,17 +150,16 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		FA08737615EAF6BF001ADBF4 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "../Default@2x.png"; sourceTree = "<group>"; };
+		FA09AC5F15E8C807004BBDBA /* RobotKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = RobotKit.framework; sourceTree = "<group>"; };
+		FA09AC6015E8C807004BBDBA /* RobotUIKit.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = RobotUIKit.bundle; sourceTree = "<group>"; };
+		FA09AC6315E8C824004BBDBA /* RobotUIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = RobotUIKit.framework; sourceTree = "<group>"; };
 		FA1BE53415E8416800B4DA6A /* GameOverScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameOverScene.h; sourceTree = "<group>"; };
 		FA1BE53515E8416800B4DA6A /* GameOverScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameOverScene.m; sourceTree = "<group>"; };
 		FA1BE54B15E854D800B4DA6A /* copter@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "copter@2x.png"; path = "Resources/copter@2x.png"; sourceTree = "<group>"; };
 		FA1BE54C15E854D800B4DA6A /* copter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = copter.png; path = Resources/copter.png; sourceTree = "<group>"; };
 		FA1BE54F15E8550900B4DA6A /* cloud.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = cloud.png; path = Resources/cloud.png; sourceTree = "<group>"; };
 		FA1BE55015E8550900B4DA6A /* cloud@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "cloud@2x.png"; path = "Resources/cloud@2x.png"; sourceTree = "<group>"; };
-		FA1BE55615E8618500B4DA6A /* RobotKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = RobotKit.framework; sourceTree = "<group>"; };
-		FA1BE55715E8618500B4DA6A /* RobotUIKit.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = RobotUIKit.bundle; sourceTree = "<group>"; };
-		FA1BE55A15E8619000B4DA6A /* RobotUIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = RobotUIKit.framework; sourceTree = "<group>"; };
-		FA1BE55C15E8648800B4DA6A /* ExternalAccessory.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExternalAccessory.framework; path = System/Library/Frameworks/ExternalAccessory.framework; sourceTree = SDKROOT; };
-		FA1BE55E15E8649100B4DA6A /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		FA1BE56015E864B000B4DA6A /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		FA1BE56115E864B000B4DA6A /* ExternalAccessory.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExternalAccessory.framework; path = System/Library/Frameworks/ExternalAccessory.framework; sourceTree = SDKROOT; };
 		FA91B5D415CDCE8200C744B3 /* bgmmo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = bgmmo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -449,8 +449,8 @@
 				FA91B5E515CDCE8200C744B3 /* Foundation.framework in Frameworks */,
 				FA91B5E715CDCE8200C744B3 /* CoreGraphics.framework in Frameworks */,
 				FA91B5E915CDCE8200C744B3 /* GameKit.framework in Frameworks */,
-				FA1BE55815E8618500B4DA6A /* RobotKit.framework in Frameworks */,
-				FA1BE55B15E8619000B4DA6A /* RobotUIKit.framework in Frameworks */,
+				FA09AC6115E8C807004BBDBA /* RobotKit.framework in Frameworks */,
+				FA09AC6415E8C824004BBDBA /* RobotUIKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -460,8 +460,6 @@
 		FA91B5C915CDCE8200C744B3 = {
 			isa = PBXGroup;
 			children = (
-				FA1BE55E15E8649100B4DA6A /* CoreMotion.framework */,
-				FA1BE55C15E8648800B4DA6A /* ExternalAccessory.framework */,
 				FA91B5EA15CDCE8200C744B3 /* bgmmo */,
 				FA91B5D715CDCE8200C744B3 /* Frameworks */,
 				FA91B5D515CDCE8200C744B3 /* Products */,
@@ -479,11 +477,11 @@
 		FA91B5D715CDCE8200C744B3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FA09AC6315E8C824004BBDBA /* RobotUIKit.framework */,
+				FA09AC5F15E8C807004BBDBA /* RobotKit.framework */,
+				FA09AC6015E8C807004BBDBA /* RobotUIKit.bundle */,
 				FA1BE56015E864B000B4DA6A /* CoreMotion.framework */,
 				FA1BE56115E864B000B4DA6A /* ExternalAccessory.framework */,
-				FA1BE55A15E8619000B4DA6A /* RobotUIKit.framework */,
-				FA1BE55615E8618500B4DA6A /* RobotKit.framework */,
-				FA1BE55715E8618500B4DA6A /* RobotUIKit.bundle */,
 				FA91B5D815CDCE8200C744B3 /* QuartzCore.framework */,
 				FA91B5DA15CDCE8200C744B3 /* OpenGLES.framework */,
 				FA91B5DC15CDCE8200C744B3 /* OpenAL.framework */,
@@ -520,6 +518,7 @@
 		FA91B5EB15CDCE8200C744B3 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				FA08737615EAF6BF001ADBF4 /* Default@2x.png */,
 				FA1BE54F15E8550900B4DA6A /* cloud.png */,
 				FA1BE55015E8550900B4DA6A /* cloud@2x.png */,
 				FA1BE54B15E854D800B4DA6A /* copter@2x.png */,
@@ -957,7 +956,8 @@
 				FA1BE54E15E854D800B4DA6A /* copter.png in Resources */,
 				FA1BE55115E8550900B4DA6A /* cloud.png in Resources */,
 				FA1BE55215E8550900B4DA6A /* cloud@2x.png in Resources */,
-				FA1BE55915E8618500B4DA6A /* RobotUIKit.bundle in Resources */,
+				FA09AC6215E8C807004BBDBA /* RobotUIKit.bundle in Resources */,
+				FA08737715EAF6BF001ADBF4 /* Default@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

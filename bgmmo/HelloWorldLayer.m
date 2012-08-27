@@ -12,6 +12,8 @@
 #import "CCTouchDispatcher.h"
 #import "SpriteCopter.h"
 #import "GameOverScene.h"
+#import "RobotUIKit/RobotUIKit.h"
+
 
 // Needed to obtain the Navigation Controller
 #import "AppDelegate.h"
@@ -22,6 +24,7 @@ CCSprite *cloud;
 
 int seekerDirection = -1;
 float score = 0;
+
 
 #pragma mark - HelloWorldLayer
 
@@ -39,7 +42,10 @@ float score = 0;
 	
 	// add layer as a child to scene
 	[scene addChild: layer];
-	
+    
+    [RKRGBLEDOutputCommand sendCommandWithRed:1.0 green:0.0 blue:0.0];
+    
+    
 	// return the scene
 	return scene;
 }
@@ -64,10 +70,11 @@ float score = 0;
         int maxY = winSize.height - cloud.contentSize.height/2;
         int rangeY = maxY - minY;
 
-        while([_targets count] < 3){
-            int actualY = (arc4random() % rangeY) + minY;    
+        while([_targets count] < 4){
+            int actualY = (arc4random() % rangeY) + minY;
             CCSprite *cocosGuy = [CCSprite spriteWithFile: @"Icon.png"];
-            cocosGuy.position = ccp( winSize.width + cocosGuy.contentSize.width , actualY );
+            int spawnX = winSize.width + cocosGuy.contentSize.width + arc4random() % (int)winSize.width;
+            cocosGuy.position = ccp( spawnX , actualY );
             [self addChild:cocosGuy];
             [_targets addObject:cocosGuy];
         }
@@ -86,6 +93,8 @@ float score = 0;
         [self schedule:@selector(nextFrame:)];
         self.isTouchEnabled = YES;        
 	}
+    // Sphero stuff    
+
 	return self;
 }
 
@@ -130,7 +139,8 @@ float score = 0;
         cocosGuy.position = ccp(cocosGuy.position.x - vx *dt, cocosGuy.position.y);
         if(cocosGuy.position.x < -1 * cocosGuy.contentSize.width ){
             int actualY = (arc4random() % rangeY) + minY;
-            cocosGuy.position = ccp(winSize.width + (cocosGuy.contentSize.width/2), actualY);
+            int spawnX = winSize.width + cocosGuy.contentSize.width + arc4random() % (int)winSize.width;
+            cocosGuy.position = ccp( spawnX , actualY );
         }
         
         CGRect cocosGuyRect = CGRectMake(
@@ -188,6 +198,20 @@ float score = 0;
 	[super dealloc];
 }
 
+-(void) onEnter
+{
+    [super onEnter];
+    robotOnline = NO;
+    [self appDidBecomeActive:nil];
+
+}
+
+-(void) onExit
+{
+    [super onExit];
+    [self appWillResignActive:nil];
+}
+
 #pragma mark GameKit delegate
 
 -(void) achievementViewControllerDidFinish:(GKAchievementViewController *)viewController
@@ -201,4 +225,37 @@ float score = 0;
 	AppController *app = (AppController*) [[UIApplication sharedApplication] delegate];
 	[[app navController] dismissModalViewControllerAnimated:YES];
 }
+
+// Sphero functions
+-(void)setupRobotConnection {
+    NSLog(@"setupRobotConnection");
+    /*Try to connect to the robot*/
+    //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleRobotOnline) name:RKDeviceConnectionOnlineNotification object:nil];
+    if ([[RKRobotProvider sharedRobotProvider] isRobotUnderControl]) {
+        [[RKRobotProvider sharedRobotProvider] openRobotConnection];
+    }
+}
+
+- (void)handleRobotOnline {
+    NSLog(@"handleRobotOnline");
+    /*The robot is now online, we can begin sending commands*/
+    if(!robotOnline) {
+        /* Send commands to Sphero Here: */
+        
+    }
+    robotOnline = YES;
+}
+
+-(void)appDidBecomeActive:(NSNotification*)notification {
+    NSLog(@"appDidBecomeActive");
+    /*When the application becomes active after entering the background we try to connect to the robot*/
+    [self setupRobotConnection];
+}
+-(void)appWillResignActive:(NSNotification*)notification {
+    NSLog(@"appWillResignActive");
+    /*When the application is entering the background we need to close the connection to the robot*/
+    [RKRGBLEDOutputCommand sendCommandWithRed:0.0 green:0.0 blue:0.0];
+    [[RKRobotProvider sharedRobotProvider] closeRobotConnection];
+}
+
 @end

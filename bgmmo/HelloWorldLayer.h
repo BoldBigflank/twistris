@@ -12,13 +12,20 @@
 // When you import this file, you import all the cocos2d classes
 #import "cocos2d.h"
 
+// Sphero stuff
+#import "RobotKit/RobotKit.h"
+
+
 // HelloWorldLayer
 @interface HelloWorldLayer : CCLayerColor <GKAchievementViewControllerDelegate, GKLeaderboardViewControllerDelegate>
 {
     NSMutableArray *_targets;
+    BOOL robotOnline;
 }
 
 // returns a CCScene that contains the HelloWorldLayer as the only child
 +(CCScene *) scene;
+-(void)setupRobotConnection;
+-(void)handleRobotOnline;
 
 @end
