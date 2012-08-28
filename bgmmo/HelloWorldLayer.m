@@ -21,7 +21,7 @@
 #define TOTAL_PACKET_COUNT 200
 #define PACKET_COUNT_THRESHOLD 50
 
-Copter *copterDude;
+CCNode *center;
 CCSprite *beeDude;
 CCSprite *cloud;
 
@@ -57,12 +57,14 @@ float score = 0;
 -(id) init
 {
     _targets = [[NSMutableArray alloc] init];
-    
+    _dots = [[NSMutableArray alloc] init];
+    maxDots = 5;
     score = 0;
+    radius = 100;
 	// always call "super" init
 	// Apple recommends to re-assign "self" with the "super's" return value
     // 91, 150, 239, 255
-    if( (self=[super initWithColor:ccc4(91, 150, 239, 255)] )) {
+    if( (self=[super initWithColor:ccc4(0, 0, 0, 255)] )) {
         // A happy cloud
         cloud = [CCSprite spriteWithFile: @"cloud.png"];
         cloud.position = ccp( 700, 200 );
@@ -88,10 +90,29 @@ float score = 0;
 //        [self addChild:beeDude];
 
         // create and initialize our seeker sprite, and add it to this layer
-        copterDude = [Copter copter];
-        copterDude.position = ccp( 50, 100 );
-        standardAcceleration = copterDude.acceleration;
-        [self addChild:copterDude];
+        
+        // The center points for the dot
+        center = [CCNode node];
+        center.position = CGPointMake(radius+10, winSize.height/2);
+        [self addChild:center];
+        
+        // Create the dots
+        while([_dots count] < maxDots){
+            
+            CCSprite *dotDude = [CCSprite spriteWithFile: @"dot.png"];
+            [center addChild:dotDude];
+            [_dots addObject:dotDude];
+        }
+        
+        // Space the dots
+        for (CCNode *dotDude in _dots) {
+            // Radians position
+            int index = [_dots indexOfObject:dotDude];
+            float angle = 2 * M_PI / _dots.count * index; // Degrees
+            NSLog(@"angle %f, %f, %f", angle, cos(angle) * radius, sin(angle) * radius);
+            dotDude.position = ccp( cos(angle) * radius, sin(angle) * radius );
+            dotDude.rotation = -1 * center.rotation;
+        }
         
         // schedule a repeating callback on every frame
         //[self schedule:@selector(nextFrame:)];
@@ -105,7 +126,7 @@ float score = 0;
 - (void) nextFrame:(ccTime)dt {
     // Update the score
     score += dt*10;
-    int vx = copterDude.vx + score/3;
+    int vx = score/3;
     
     
     CGSize winSize = [[CCDirector sharedDirector] winSize];
@@ -122,24 +143,7 @@ float score = 0;
         cloud.position = ccp(winSize.width + (cloud.contentSize.width/2), actualY);
     }
     
-    // Update the copter
-    copterDude.velocity = copterDude.velocity + (int)copterDude.acceleration*dt;
-    if (copterDude.velocity < -640) copterDude.velocity = -640;
-    copterDude.position = ccp( copterDude.position.x, copterDude.position.y + copterDude.velocity *dt);
-    if (copterDude.position.y < -1 * copterDude.contentSize.height ) {
-        copterDude.position = ccp( copterDude.position.x, winSize.height + copterDude.contentSize.height );
-    }
-    if (copterDude.position.y > winSize.height + copterDude.contentSize.height ) {
-        copterDude.position = ccp( copterDude.position.x, -1 * copterDude.contentSize.height );
-    }
-    //copterDude.rotation = 2 * M_PI * atan( -copterDude.velocity / vx);
-    
     // Check for collisions
-    CGRect copterRect = CGRectMake( // 21 pixel left margin, 4 pixel right
-       copterDude.position.x - (copterDude.contentSize.width/2) + 21,
-       copterDude.position.y - (copterDude.contentSize.height/2),
-       copterDude.contentSize.width - 25,
-       copterDude.contentSize.height);
 
     for (CCSprite *beeDude in _targets) {
         beeDude.position = ccp(beeDude.position.x - vx *dt, beeDude.position.y);
@@ -157,7 +161,6 @@ float score = 0;
         
         if (CGRectIntersectsRect(copterRect, beeDudeRect)) {
             NSLog(@"COLLISION");
-            copterDude.visible = false;
             [self unschedule:@selector(nextFrame:)];
             [self runAction:[CCSequence actions:
                             [CCCallFunc actionWithTarget:self selector:@selector(blowUpCopter)],
@@ -185,13 +188,11 @@ float score = 0;
     sun.autoRemoveOnFinish = YES;
     sun.speed = 30.0f;
     sun.duration = 0.5f;
-    sun.position = ccp(copterDude.position.x, copterDude.position.y);
+    sun.position = ccp(50, 50);
     sun.startSize = 5;
     sun.endSize = 80;
     sun.life = 0.6;
     [self addChild:sun];
-    copterDude.visible = false;
-    //[self removeChild:copterDude cleanup:YES];
 }
 
 - (void)gameOverDone {
@@ -203,13 +204,11 @@ float score = 0;
 
 - (BOOL)ccTouchBegan:(UITouch *)touch withEvent:(UIEvent *)event {
     // Reverse direction of the seeker
-    copterDude.acceleration =  abs(standardAcceleration);
     return YES;
 }
 
 - (void)ccTouchEnded:(UITouch *)touch withEvent:(UIEvent *)event {
     // Return the direction of seeker
-    copterDude.acceleration = -1 * abs(standardAcceleration);
 }
 
 -(void) registerWithTouchDispatcher
@@ -372,12 +371,10 @@ float score = 0;
 //        RKQuaternionData *quaternionData = sensorsData.quaternionData;
 
         NSLog(@"Yaw %f", attitudeData.yaw);
-        copterDude.velocity = copterDude.velocity + 5 * attitudeData.yaw ;
-        if(copterDude.velocity > copterDude.vx) copterDude.velocity = copterDude.vx;
-        if(copterDude.velocity < -copterDude.vx) copterDude.velocity = -copterDude.vx;
-        
-        copterDude.rotation = -attitudeData.yaw;
-        
+        center.rotation = -attitudeData.yaw;
+        for (CCSprite *dotDude in _dots) {
+            dotDude.rotation = -1 * center.rotation;
+        }
         //[RKCalibrateCommand sendCommandWithHeading:0.0];
         
         // Print data to the text fields

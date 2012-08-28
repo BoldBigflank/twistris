@@ -20,9 +20,13 @@
 @interface HelloWorldLayer : CCLayerColor <GKAchievementViewControllerDelegate, GKLeaderboardViewControllerDelegate>
 {
     NSMutableArray *_targets;
+    NSMutableArray *_dots;
+    
     BOOL robotOnline;
     CCParticleFire *sun;
     int  packetCounter;
+    int maxDots;
+    int radius;
 }
 
 // returns a CCScene that contains the HelloWorldLayer as the only child
