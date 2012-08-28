@@ -63,6 +63,6 @@
 {
     GameOverScene *gameOverScene = [GameOverScene node];
     [gameOverScene.layer.label setString:@"Tap the screen to lift your copter"];
-	[[CCDirector sharedDirector] replaceScene:gameOverScene];
+	[[CCDirector sharedDirector] pushScene:gameOverScene];
 }
 @end

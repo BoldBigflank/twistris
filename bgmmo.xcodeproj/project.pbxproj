@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		FA08737715EAF6BF001ADBF4 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA08737615EAF6BF001ADBF4 /* Default@2x.png */; };
+		FA08737B15EAFFFC001ADBF4 /* bee.png in Resources */ = {isa = PBXBuildFile; fileRef = FA08737915EAFFFC001ADBF4 /* bee.png */; };
+		FA08737C15EAFFFD001ADBF4 /* bee@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA08737A15EAFFFC001ADBF4 /* bee@2x.png */; };
 		FA09AC6115E8C807004BBDBA /* RobotKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA09AC5F15E8C807004BBDBA /* RobotKit.framework */; };
 		FA09AC6215E8C807004BBDBA /* RobotUIKit.bundle in Resources */ = {isa = PBXBuildFile; fileRef = FA09AC6015E8C807004BBDBA /* RobotUIKit.bundle */; };
 		FA09AC6415E8C824004BBDBA /* RobotUIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA09AC6315E8C824004BBDBA /* RobotUIKit.framework */; };
@@ -151,6 +153,8 @@
 
 /* Begin PBXFileReference section */
 		FA08737615EAF6BF001ADBF4 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "../Default@2x.png"; sourceTree = "<group>"; };
+		FA08737915EAFFFC001ADBF4 /* bee.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bee.png; sourceTree = "<group>"; };
+		FA08737A15EAFFFC001ADBF4 /* bee@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bee@2x.png"; sourceTree = "<group>"; };
 		FA09AC5F15E8C807004BBDBA /* RobotKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = RobotKit.framework; sourceTree = "<group>"; };
 		FA09AC6015E8C807004BBDBA /* RobotUIKit.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = RobotUIKit.bundle; sourceTree = "<group>"; };
 		FA09AC6315E8C824004BBDBA /* RobotUIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = RobotUIKit.framework; sourceTree = "<group>"; };
@@ -518,6 +522,8 @@
 		FA91B5EB15CDCE8200C744B3 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				FA08737915EAFFFC001ADBF4 /* bee.png */,
+				FA08737A15EAFFFC001ADBF4 /* bee@2x.png */,
 				FA08737615EAF6BF001ADBF4 /* Default@2x.png */,
 				FA1BE54F15E8550900B4DA6A /* cloud.png */,
 				FA1BE55015E8550900B4DA6A /* cloud@2x.png */,
@@ -958,6 +964,8 @@
 				FA1BE55215E8550900B4DA6A /* cloud@2x.png in Resources */,
 				FA09AC6215E8C807004BBDBA /* RobotUIKit.bundle in Resources */,
 				FA08737715EAF6BF001ADBF4 /* Default@2x.png in Resources */,
+				FA08737B15EAFFFC001ADBF4 /* bee.png in Resources */,
+				FA08737C15EAFFFD001ADBF4 /* bee@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

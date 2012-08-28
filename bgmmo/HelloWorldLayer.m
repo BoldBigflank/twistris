@@ -18,11 +18,14 @@
 // Needed to obtain the Navigation Controller
 #import "AppDelegate.h"
 
-Copter *seeker1;
-CCSprite *cocosGuy;
+#define TOTAL_PACKET_COUNT 200
+#define PACKET_COUNT_THRESHOLD 50
+
+Copter *copterDude;
+CCSprite *beeDude;
 CCSprite *cloud;
 
-int seekerDirection = -1;
+int standardAcceleration = -1;
 float score = 0;
 
 
@@ -72,25 +75,26 @@ float score = 0;
 
         while([_targets count] < 4){
             int actualY = (arc4random() % rangeY) + minY;
-            CCSprite *cocosGuy = [CCSprite spriteWithFile: @"Icon.png"];
-            int spawnX = winSize.width + cocosGuy.contentSize.width + arc4random() % (int)winSize.width;
-            cocosGuy.position = ccp( spawnX , actualY );
-            [self addChild:cocosGuy];
-            [_targets addObject:cocosGuy];
+            CCSprite *beeDude = [CCSprite spriteWithFile: @"bee.png"];
+            int spawnX = winSize.width + beeDude.contentSize.width + arc4random() % (int)winSize.width;
+            beeDude.position = ccp( spawnX , actualY );
+            beeDude.rotation = -25;
+            [self addChild:beeDude];
+            [_targets addObject:beeDude];
         }
 		// do the same for our cocos2d guy, reusing the app icon as its image
-//        cocosGuy = [CCSprite spriteWithFile: @"Icon.png"];
-//        cocosGuy.position = ccp( 450, 300 );
-//        [self addChild:cocosGuy];
+//        beeDude = [CCSprite spriteWithFile: @"Icon.png"];
+//        beeDude.position = ccp( 450, 300 );
+//        [self addChild:beeDude];
 
         // create and initialize our seeker sprite, and add it to this layer
-        seeker1 = [Copter copter];
-        seeker1.position = ccp( 50, 100 );
-        [self addChild:seeker1];
+        copterDude = [Copter copter];
+        copterDude.position = ccp( 50, 100 );
+        standardAcceleration = copterDude.acceleration;
+        [self addChild:copterDude];
         
-
         // schedule a repeating callback on every frame
-        [self schedule:@selector(nextFrame:)];
+        //[self schedule:@selector(nextFrame:)];
         self.isTouchEnabled = YES;        
 	}
     // Sphero stuff    
@@ -101,10 +105,9 @@ float score = 0;
 - (void) nextFrame:(ccTime)dt {
     // Update the score
     score += dt*10;
-    int vx = seeker1.vx + score/10;
+    int vx = copterDude.vx + score/3;
     
     
-    // Send the cocos guy left
     CGSize winSize = [[CCDirector sharedDirector] winSize];
     int minY = cloud.contentSize.height/2;
     int maxY = winSize.height - cloud.contentSize.height/2;
@@ -120,40 +123,47 @@ float score = 0;
     }
     
     // Update the copter
-    seeker1.velocity = seeker1.velocity + (int)seeker1.acceleration*dt;
-    if (seeker1.velocity < -640) seeker1.velocity = -640;
-    seeker1.position = ccp( seeker1.position.x, seeker1.position.y + seeker1.velocity *dt);
-    if (seeker1.position.y < -32 ) {
-        seeker1.position = ccp( seeker1.position.x, winSize.height + seeker1.contentSize.height );
+    copterDude.velocity = copterDude.velocity + (int)copterDude.acceleration*dt;
+    if (copterDude.velocity < -640) copterDude.velocity = -640;
+    copterDude.position = ccp( copterDude.position.x, copterDude.position.y + copterDude.velocity *dt);
+    if (copterDude.position.y < -1 * copterDude.contentSize.height ) {
+        copterDude.position = ccp( copterDude.position.x, winSize.height + copterDude.contentSize.height );
     }
-    seeker1.rotation = 2 * M_PI * atan( -seeker1.velocity / vx);
+    if (copterDude.position.y > winSize.height + copterDude.contentSize.height ) {
+        copterDude.position = ccp( copterDude.position.x, -1 * copterDude.contentSize.height );
+    }
+    //copterDude.rotation = 2 * M_PI * atan( -copterDude.velocity / vx);
     
     // Check for collisions
-    CGRect copterRect = CGRectMake(
-       seeker1.position.x - (seeker1.contentSize.width/2),
-       seeker1.position.y - (seeker1.contentSize.height/2),
-       seeker1.contentSize.width,
-       seeker1.contentSize.height);
+    CGRect copterRect = CGRectMake( // 21 pixel left margin, 4 pixel right
+       copterDude.position.x - (copterDude.contentSize.width/2) + 21,
+       copterDude.position.y - (copterDude.contentSize.height/2),
+       copterDude.contentSize.width - 25,
+       copterDude.contentSize.height);
 
-    for (CCSprite *cocosGuy in _targets) {
-        cocosGuy.position = ccp(cocosGuy.position.x - vx *dt, cocosGuy.position.y);
-        if(cocosGuy.position.x < -1 * cocosGuy.contentSize.width ){
+    for (CCSprite *beeDude in _targets) {
+        beeDude.position = ccp(beeDude.position.x - vx *dt, beeDude.position.y);
+        if(beeDude.position.x < -1 * beeDude.contentSize.width ){
             int actualY = (arc4random() % rangeY) + minY;
-            int spawnX = winSize.width + cocosGuy.contentSize.width + arc4random() % (int)winSize.width;
-            cocosGuy.position = ccp( spawnX , actualY );
+            int spawnX = winSize.width + beeDude.contentSize.width + arc4random() % (int)winSize.width;
+            beeDude.position = ccp( spawnX , actualY );
         }
         
-        CGRect cocosGuyRect = CGRectMake(
-            cocosGuy.position.x - (cocosGuy.contentSize.width/2),
-            cocosGuy.position.y - (cocosGuy.contentSize.height/2),
-            cocosGuy.contentSize.width,
-            cocosGuy.contentSize.height);
+        CGRect beeDudeRect = CGRectMake(
+            beeDude.position.x - (beeDude.contentSize.width/2) + 15,
+            beeDude.position.y - (beeDude.contentSize.height/2)+5,
+            beeDude.contentSize.width - 15,
+            beeDude.contentSize.height - 5);
         
-        if (CGRectIntersectsRect(copterRect, cocosGuyRect)) {
+        if (CGRectIntersectsRect(copterRect, beeDudeRect)) {
             NSLog(@"COLLISION");
-            GameOverScene *gameOverScene = [GameOverScene node];
-            [gameOverScene.layer.label setString:[NSString stringWithFormat:@"Your Score: %i", (int)score]];
-            [[CCDirector sharedDirector] pushScene:gameOverScene];
+            copterDude.visible = false;
+            [self unschedule:@selector(nextFrame:)];
+            [self runAction:[CCSequence actions:
+                            [CCCallFunc actionWithTarget:self selector:@selector(blowUpCopter)],
+                             [CCDelayTime actionWithDuration:3],
+                             [CCCallFunc actionWithTarget:self selector:@selector(gameOverDone)],
+                             nil]];
         }
     }
     
@@ -169,15 +179,37 @@ float score = 0;
     
 }
 
+- (void)blowUpCopter {
+    sun = [[CCParticleFire alloc] initWithTotalParticles:300];
+    sun.texture = [[CCTextureCache sharedTextureCache] addImage:@"copter.png"];
+    sun.autoRemoveOnFinish = YES;
+    sun.speed = 30.0f;
+    sun.duration = 0.5f;
+    sun.position = ccp(copterDude.position.x, copterDude.position.y);
+    sun.startSize = 5;
+    sun.endSize = 80;
+    sun.life = 0.6;
+    [self addChild:sun];
+    copterDude.visible = false;
+    //[self removeChild:copterDude cleanup:YES];
+}
+
+- (void)gameOverDone {
+    GameOverScene *gameOverScene = [GameOverScene node];
+    [gameOverScene.layer.label setString:[NSString stringWithFormat:@"Your Score: %i", (int)score]];
+    [[CCDirector sharedDirector] pushScene:gameOverScene];
+    
+}
+
 - (BOOL)ccTouchBegan:(UITouch *)touch withEvent:(UIEvent *)event {
     // Reverse direction of the seeker
-    seeker1.acceleration = abs(seeker1.acceleration);
+    copterDude.acceleration =  abs(standardAcceleration);
     return YES;
 }
 
 - (void)ccTouchEnded:(UITouch *)touch withEvent:(UIEvent *)event {
     // Return the direction of seeker
-    seeker1.acceleration = -1 * abs(seeker1.acceleration);
+    copterDude.acceleration = -1 * abs(standardAcceleration);
 }
 
 -(void) registerWithTouchDispatcher
@@ -230,7 +262,7 @@ float score = 0;
 -(void)setupRobotConnection {
     NSLog(@"setupRobotConnection");
     /*Try to connect to the robot*/
-    //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleRobotOnline) name:RKDeviceConnectionOnlineNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleRobotOnline) name:RKDeviceConnectionOnlineNotification object:nil];
     if ([[RKRobotProvider sharedRobotProvider] isRobotUnderControl]) {
         [[RKRobotProvider sharedRobotProvider] openRobotConnection];
     }
@@ -241,7 +273,16 @@ float score = 0;
     /*The robot is now online, we can begin sending commands*/
     if(!robotOnline) {
         /* Send commands to Sphero Here: */
+        [self schedule:@selector(nextFrame:)];
+        [RKBackLEDOutputCommand sendCommandWithBrightness:1.0];
         
+        [RKStabilizationCommand sendCommandWithState:RKStabilizationStateOff];
+        
+        [self sendSetDataStreamingCommand];
+        ////Register for asynchronise data streaming packets
+        [[RKDeviceMessenger sharedMessenger] addDataStreamingObserver:self selector:@selector(handleAsyncData:)];
+        
+        [RKRGBLEDOutputCommand sendCommandWithRed:1.0 green:0.0 blue:0.0];
     }
     robotOnline = YES;
 }
@@ -254,8 +295,103 @@ float score = 0;
 -(void)appWillResignActive:(NSNotification*)notification {
     NSLog(@"appWillResignActive");
     /*When the application is entering the background we need to close the connection to the robot*/
-    [RKRGBLEDOutputCommand sendCommandWithRed:0.0 green:0.0 blue:0.0];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:RKDeviceConnectionOnlineNotification object:nil];
+    
+    // Turn off data streaming
+    [RKSetDataStreamingCommand sendCommandWithSampleRateDivisor:0
+                                                   packetFrames:0
+                                                     sensorMask:RKDataStreamingMaskOff
+                                                    packetCount:0];
+    // Unregister for async data packets
+    [[RKDeviceMessenger sharedMessenger] removeDataStreamingObserver:self];
+    
+    // Restore stabilization (the control unit)
+    [RKStabilizationCommand sendCommandWithState:RKStabilizationStateOn];
+    
+    // Close the connection
     [[RKRobotProvider sharedRobotProvider] closeRobotConnection];
+    
+    robotOnline = NO;
+}
+
+-(void)sendSetDataStreamingCommand {
+    
+    // Requesting the Accelerometer X, Y, and Z filtered (in Gs)
+    //            the IMU Angles roll, pitch, and yaw (in degrees)
+    //            the Quaternion data q0, q1, q2, and q3 (in 1/10000) of a Q
+    RKDataStreamingMask mask =  RKDataStreamingMaskAccelerometerFilteredAll |
+    RKDataStreamingMaskIMUAnglesFilteredAll   |
+    RKDataStreamingMaskQuaternionAll;
+    
+    // Note: If your ball has Firmware < 1.20 then these Quaternions
+    //       will simply show up as zeros.
+    
+    // Sphero samples this data at 400 Hz.  The divisor sets the sample
+    // rate you want it to store frames of data.  In this case 400Hz/40 = 10Hz
+    uint16_t divisor = 40;
+    
+    // Packet frames is the number of frames Sphero will store before it sends
+    // an async data packet to the iOS device
+    uint16_t packetFrames = 1;
+    
+    // Count is the number of async data packets Sphero will send you before
+    // it stops.  You want to register for a finite count and then send the command
+    // again once you approach the limit.  Otherwise data streaming may be left
+    // on when your app crashes, putting Sphero in a bad state.
+    uint8_t count = TOTAL_PACKET_COUNT;
+    
+    // Reset finite packet counter
+    packetCounter = 0;
+    
+    // Send command to Sphero
+    [RKSetDataStreamingCommand sendCommandWithSampleRateDivisor:divisor
+                                                   packetFrames:packetFrames
+                                                     sensorMask:mask
+                                                    packetCount:count];
+    
+}
+
+- (void)handleAsyncData:(RKDeviceAsyncData *)asyncData
+{
+    // Need to check which type of async data is received as this method will be called for
+    // data streaming packets and sleep notification packets. We are going to ingnore the sleep
+    // notifications.
+    if ([asyncData isKindOfClass:[RKDeviceSensorsAsyncData class]]) {
+        
+        // If we are getting close to packet limit, request more
+        packetCounter++;
+        if( packetCounter > (TOTAL_PACKET_COUNT-PACKET_COUNT_THRESHOLD)) {
+            [self sendSetDataStreamingCommand];
+        }
+        
+        // Received sensor data, so display it to the user.
+        RKDeviceSensorsAsyncData *sensorsAsyncData = (RKDeviceSensorsAsyncData *)asyncData;
+        RKDeviceSensorsData *sensorsData = [sensorsAsyncData.dataFrames lastObject];
+//        RKAccelerometerData *accelerometerData = sensorsData.accelerometerData;
+        RKAttitudeData *attitudeData = sensorsData.attitudeData;
+//        RKQuaternionData *quaternionData = sensorsData.quaternionData;
+
+        NSLog(@"Yaw %f", attitudeData.yaw);
+        copterDude.velocity = copterDude.velocity + 5 * attitudeData.yaw ;
+        if(copterDude.velocity > copterDude.vx) copterDude.velocity = copterDude.vx;
+        if(copterDude.velocity < -copterDude.vx) copterDude.velocity = -copterDude.vx;
+        
+        copterDude.rotation = -attitudeData.yaw;
+        
+        //[RKCalibrateCommand sendCommandWithHeading:0.0];
+        
+        // Print data to the text fields
+//        self.xValueLabel.text = [NSString stringWithFormat:@"%.6f", accelerometerData.acceleration.x];
+//        self.yValueLabel.text = [NSString stringWithFormat:@"%.6f", accelerometerData.acceleration.y];
+//        self.zValueLabel.text = [NSString stringWithFormat:@"%.6f", accelerometerData.acceleration.z];
+//        self.pitchValueLabel.text = [NSString stringWithFormat:@"%.0f", attitudeData.pitch];
+//        self.rollValueLabel.text = [NSString stringWithFormat:@"%.0f", attitudeData.roll];
+//        self.yawValueLabel.text = [NSString stringWithFormat:@"%.0f", attitudeData.yaw];
+//        self.q0ValueLabel.text = [NSString stringWithFormat:@"%d", quaternionData.quaternions.q0];
+//        self.q1ValueLabel.text = [NSString stringWithFormat:@"%d", quaternionData.quaternions.q1];
+//        self.q2ValueLabel.text = [NSString stringWithFormat:@"%d", quaternionData.quaternions.q2];
+//        self.q3ValueLabel.text = [NSString stringWithFormat:@"%d", quaternionData.quaternions.q3];
+    }
 }
 
 @end

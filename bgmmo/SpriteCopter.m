@@ -22,7 +22,7 @@
     
     Copter *copter = nil;
     if ((copter = [[[super alloc] initWithFile: @"copter.png"] autorelease])) {
-        copter.velocity = 100;
+        copter.velocity = 150;
         copter.vx = 100;
         copter.acceleration = -400;
         

@@ -21,6 +21,8 @@
 {
     NSMutableArray *_targets;
     BOOL robotOnline;
+    CCParticleFire *sun;
+    int  packetCounter;
 }
 
 // returns a CCScene that contains the HelloWorldLayer as the only child
