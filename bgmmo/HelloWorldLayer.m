@@ -21,12 +21,16 @@
 #define TOTAL_PACKET_COUNT 200
 #define PACKET_COUNT_THRESHOLD 50
 
+#define MAX_LIVES 9
+#define MAX_DOTS 3
+#define DISK_RADIUS 100
+
 CCNode *center;
-CCSprite *beeDude;
 CCSprite *cloud;
 
 int standardAcceleration = -1;
 float score = 0;
+int lives;
 
 
 #pragma mark - HelloWorldLayer
@@ -46,9 +50,8 @@ float score = 0;
 	// add layer as a child to scene
 	[scene addChild: layer];
     
-    [RKRGBLEDOutputCommand sendCommandWithRed:1.0 green:0.0 blue:0.0];
-    
-    
+    [RKRGBLEDOutputCommand sendCommandWithRed:0.0 green:1.0 blue:0.0];
+
 	// return the scene
 	return scene;
 }
@@ -56,32 +59,122 @@ float score = 0;
 // on "init" you need to initialize your instance
 -(id) init
 {
+//    [self sendSetDataStreamingCommand];
+//    ////Register for asynchronise data streaming packets
+//    [[RKDeviceMessenger sharedMessenger] addDataStreamingObserver:self selector:@selector(handleAsyncData:)];
+
     _targets = [[NSMutableArray alloc] init];
     _dots = [[NSMutableArray alloc] init];
-    maxDots = 5;
     score = 0;
-    radius = 100;
+    lives = MAX_LIVES;
 	// always call "super" init
 	// Apple recommends to re-assign "self" with the "super's" return value
     // 91, 150, 239, 255
     if( (self=[super initWithColor:ccc4(0, 0, 0, 255)] )) {
-        // A happy cloud
-        cloud = [CCSprite spriteWithFile: @"cloud.png"];
-        cloud.position = ccp( 700, 200 );
-        [self addChild:cloud];
-
         CGSize winSize = [[CCDirector sharedDirector] winSize];
         int minY = cloud.contentSize.height/2;
         int maxY = winSize.height - cloud.contentSize.height/2;
-        int rangeY = maxY - minY;
-
+        
+        CCParticleRain *starSplat = [[CCParticleRain alloc] initWithTotalParticles:300];
+        starSplat.texture = [[CCTextureCache sharedTextureCache] addImage:@"star.png"];
+        starSplat.duration = 1;
+        starSplat.emissionRate = 3200;
+        starSplat.life = 8;
+        starSplat.lifeVar = 0;
+        starSplat.startSize = 2;
+        starSplat.startSizeVar = 1;
+        starSplat.endSize = 2;
+        starSplat.endSizeVar = 1;
+        starSplat.angle = 180;
+        starSplat.angleVar = 0;
+        starSplat.rotation = 0;
+        starSplat.gravity = ccp(0, 0);
+        starSplat.speed = winSize.width/8;
+        starSplat.speedVar = 5;
+        starSplat.radialAccel = 0;
+        starSplat.radialAccelVar = 0;
+        starSplat.tangentialAccel = 0;
+        starSplat.tangentialAccelVar = 0;
+        starSplat.position = ccp(winSize.width/2, winSize.height/2);
+        starSplat.posVar = ccp(winSize.width/2, winSize.height/2);
+        ccColor4F startColor = {1.0f, 1.0f, 1.0f, 1.0f};
+        starSplat.startColor = startColor;
+        ccColor4F startColorVar = {0.2f, 0.25f, 0.2f, 0.29f};
+        starSplat.startColorVar = startColorVar;
+        ccColor4F endColor = {1.0f, 1.0f, 1.0f, 1.0f};
+        starSplat.endColor = endColor;
+        ccColor4F endColorVar = {0.0f, 0.0f, 0.0f, 0.0f};
+        starSplat.endColorVar = endColorVar;
+        starSplat.autoRemoveOnFinish = YES;
+        [self addChild:starSplat];
+        
+        starField = [[CCParticleRain alloc] initWithTotalParticles:400];
+        starField.texture = [[CCTextureCache sharedTextureCache] addImage:@"star.png"];
+        starField.duration = -1;
+        starField.life = 8;
+        starField.lifeVar = 0;
+        starField.startSize = 2;
+        starField.startSizeVar = 1;
+        starField.endSize = 2;
+        starField.endSizeVar = 1;
+        starField.angle = 180;
+        starField.angleVar = 0;
+        starField.rotation = 0;
+        starField.gravity = ccp(0, 0);
+        starField.speed = winSize.width/8;
+        starField.speedVar = 5;
+        starField.radialAccel = 0;
+        starField.radialAccelVar = 0;
+        starField.tangentialAccel = 0;
+        starField.tangentialAccelVar = 0;
+        starField.position = ccp(winSize.width, winSize.height/2);
+        starField.posVar = ccp(0, winSize.height/2);
+        starField.startColor = startColor;
+        starField.startColorVar = startColorVar;
+        starField.endColor = endColor;
+        starField.endColorVar = endColorVar;
+        [self addChild:starField];
+        
+        // The center points for the dot
+        center = [CCNode node];
+        center.position = CGPointMake(DISK_RADIUS +10, winSize.height/2);
+        [self addChild:center];
+        
         while([_targets count] < 4){
-            int actualY = (arc4random() % rangeY) + minY;
-            CCSprite *beeDude = [CCSprite spriteWithFile: @"bee.png"];
+            int actualY = (arc4random() % (2 * DISK_RADIUS)) + minY + center.position.y - DISK_RADIUS;
+            CCSprite *beeDude = [CCSprite spriteWithFile: @"dot.png"];
             int spawnX = winSize.width + beeDude.contentSize.width + arc4random() % (int)winSize.width;
             beeDude.position = ccp( spawnX , actualY );
-            beeDude.rotation = -25;
             [self addChild:beeDude];
+            
+            // Give it a cool trail
+            CCParticleMeteor *tail = [[CCParticleMeteor alloc] initWithTotalParticles:100];
+            tail.texture = [[CCTextureCache sharedTextureCache] addImage:@"dot.png"];
+            tail.autoRemoveOnFinish = YES;
+            tail.speed = 30.0f;
+            tail.duration = -1;
+            tail.position = ccp(beeDude.contentSize.width/2, beeDude.contentSize.height/2);
+            tail.startSize = beeDude.contentSize.height;
+            tail.endSize = 10;
+            tail.life = 0.6;
+            tail.lifeVar = 0.675;
+            tail.gravity = ccp(winSize.width, 0);
+            tail.angle = 0;
+            
+            
+            ccColor4F startColor = {0.87f, 0.51f, 0.597f, 1.0f};
+            tail.startColor = startColor;
+            ccColor4F startColorVar = {0.5f, 0.5f, 0.5f, 1.0f};
+            tail.startColorVar = startColorVar;
+            ccColor4F endColor = {0.1f, 0.1f, 0.1f, 0.2f};
+            tail.endColor = endColor;
+            ccColor4F endColorVar = {0.1f, 0.1f, 0.1f, 0.2f};
+            tail.endColorVar = endColorVar;
+            
+            
+            [beeDude addChild:tail];
+            
+            
             [_targets addObject:beeDude];
         }
 		// do the same for our cocos2d guy, reusing the app icon as its image
@@ -91,13 +184,12 @@ float score = 0;
 
         // create and initialize our seeker sprite, and add it to this layer
         
-        // The center points for the dot
-        center = [CCNode node];
-        center.position = CGPointMake(radius+10, winSize.height/2);
-        [self addChild:center];
-        
+        CCSprite *ring = [CCSprite spriteWithFile:@"ring.png"];
+        [center addChild:ring];
+        ring.scale = 2 * DISK_RADIUS / ring.contentSize.width;
+//        ring.position = ccp(  ring.contentSize.width - DISK_RADIUS, ring.scale * ring.contentSize.height/2);
         // Create the dots
-        while([_dots count] < maxDots){
+        while([_dots count] < MAX_DOTS){
             
             CCSprite *dotDude = [CCSprite spriteWithFile: @"dot.png"];
             [center addChild:dotDude];
@@ -109,13 +201,13 @@ float score = 0;
             // Radians position
             int index = [_dots indexOfObject:dotDude];
             float angle = 2 * M_PI / _dots.count * index; // Degrees
-            NSLog(@"angle %f, %f, %f", angle, cos(angle) * radius, sin(angle) * radius);
-            dotDude.position = ccp( cos(angle) * radius, sin(angle) * radius );
+            NSLog(@"angle %f, %f, %f", angle, cos(angle) * DISK_RADIUS, sin(angle) * DISK_RADIUS);
+            dotDude.position = ccp( cos(angle) * DISK_RADIUS, sin(angle) * DISK_RADIUS );
             dotDude.rotation = -1 * center.rotation;
         }
         
         // schedule a repeating callback on every frame
-        //[self schedule:@selector(nextFrame:)];
+        [self schedule:@selector(nextFrame:)];
         self.isTouchEnabled = YES;        
 	}
     // Sphero stuff    
@@ -124,12 +216,24 @@ float score = 0;
 }
 
 - (void) nextFrame:(ccTime)dt {
+    CGSize winSize = [[CCDirector sharedDirector] winSize];
+    AppController *appD = (AppController *)[[UIApplication sharedApplication] delegate];
+    center.rotation =  -1 * [appD currentYaw];
+    for (CCSprite *dotDude in _dots) {
+        dotDude.rotation = -1 * center.rotation;
+    }
+    if([appD hasResumed]){
+        float red = min(1.0, 2 * (float)(MAX_LIVES - lives)/MAX_LIVES) ;
+        float green = max(0.0, (float)lives/MAX_LIVES);
+        [RKRGBLEDOutputCommand sendCommandWithRed:red green:green blue:0.0];
+        appD.hasResumed = FALSE;
+    }
+    
     // Update the score
     score += dt*10;
-    int vx = score/3;
+    int vx = winSize.width/3 + score/3;
     
     
-    CGSize winSize = [[CCDirector sharedDirector] winSize];
     int minY = cloud.contentSize.height/2;
     int maxY = winSize.height - cloud.contentSize.height/2;
     int rangeY = maxY - minY;
@@ -148,9 +252,10 @@ float score = 0;
     for (CCSprite *beeDude in _targets) {
         beeDude.position = ccp(beeDude.position.x - vx *dt, beeDude.position.y);
         if(beeDude.position.x < -1 * beeDude.contentSize.width ){
-            int actualY = (arc4random() % rangeY) + minY;
+            int actualY = (arc4random() % (2 * DISK_RADIUS)) + minY + center.position.y - DISK_RADIUS;
             int spawnX = winSize.width + beeDude.contentSize.width + arc4random() % (int)winSize.width;
             beeDude.position = ccp( spawnX , actualY );
+            beeDude.visible = true;
         }
         
         CGRect beeDudeRect = CGRectMake(
@@ -159,40 +264,102 @@ float score = 0;
             beeDude.contentSize.width - 15,
             beeDude.contentSize.height - 5);
         
-        if (CGRectIntersectsRect(copterRect, beeDudeRect)) {
-            NSLog(@"COLLISION");
-            [self unschedule:@selector(nextFrame:)];
-            [self runAction:[CCSequence actions:
-                            [CCCallFunc actionWithTarget:self selector:@selector(blowUpCopter)],
-                             [CCDelayTime actionWithDuration:3],
-                             [CCCallFunc actionWithTarget:self selector:@selector(gameOverDone)],
-                             nil]];
+        for(CCSprite *dotDude in _dots){
+            CGPoint position = [center convertToWorldSpace:dotDude.position];
+            // Relative to center
+            CGRect dotDudeRect = CGRectMake(
+                position.x - (dotDude.contentSize.width/2),
+                position.y - (dotDude.contentSize.height/2),
+                dotDude.contentSize.width,
+                dotDude.contentSize.height
+            );
+            if (CGRectIntersectsRect(dotDudeRect, beeDudeRect)) {
+                if(beeDude.visible){
+                    [self createExplosionX:position.x y:position.y];
+                    beeDude.visible = false;
+                    lives--;
+                    if(lives<0){
+                        [self unschedule:@selector(nextFrame:)];
+                        [self gameOverDone];
+                    }
+                    // Change the color of the ball
+                    float red = min(1.0, 2 * (float)(MAX_LIVES - lives)/MAX_LIVES) ;
+                    float green = max(0.0, (float)lives/MAX_LIVES);
+                    NSLog(@"%f %f", red, green);
+                    [RKRGBLEDOutputCommand sendCommandWithRed:red green:green blue:0.0];
+                }
+                    
+                // Add dotDude to dotsToDelete
+            }
+            
         }
-    }
-    
 
-    // Remove old blocks/dots
-    
-    // (occasionally) Add new blocks
-        // Narrow the gap
-        // Send them across the screen
-    // (occasionally) Dot the copter's path
-        // Send them across the screen
-    
+    }
     
 }
 
-- (void)blowUpCopter {
-    sun = [[CCParticleFire alloc] initWithTotalParticles:300];
-    sun.texture = [[CCTextureCache sharedTextureCache] addImage:@"copter.png"];
-    sun.autoRemoveOnFinish = YES;
-    sun.speed = 30.0f;
-    sun.duration = 0.5f;
-    sun.position = ccp(50, 50);
-    sun.startSize = 5;
-    sun.endSize = 80;
-    sun.life = 0.6;
-    [self addChild:sun];
+-(void) createExplosionX:(float)x y:(float)y
+{
+    [emitter resetSystem];
+    //	ParticleSystem *emitter = [RockExplosion node];
+    self->emitter = [[CCParticleSystemQuad alloc] initWithTotalParticles:30];
+    emitter.texture = [[CCTextureCache sharedTextureCache] addImage: @"Icon.png"];
+    
+    // duration
+    //	emitter.duration = -1; //continuous effect
+    emitter.duration = 1;
+    
+    // gravity
+    emitter.gravity = CGPointZero;
+    
+    // angle
+    emitter.angle = 90;
+    emitter.angleVar = 360;
+    
+    // speed of particles
+    emitter.speed = 160;
+    emitter.speedVar = 20;
+    
+    // radial
+    emitter.radialAccel = -120;
+    emitter.radialAccelVar = 0;
+    
+    // tagential
+    emitter.tangentialAccel = 30;
+    emitter.tangentialAccelVar = 0;
+    
+    // life of particles
+    emitter.life = 1;
+    emitter.lifeVar = 1;
+    
+    // spin of particles
+    emitter.startSpin = 0;
+    emitter.startSpinVar = 0;
+    emitter.endSpin = 0;
+    emitter.endSpinVar = 0;
+    
+    // color of particles
+    
+    ccColor4F startColor = {0.5f, 0.5f, 0.5f, 1.0f};
+    emitter.startColor = startColor;
+    ccColor4F startColorVar = {0.5f, 0.5f, 0.5f, 1.0f};
+    emitter.startColorVar = startColorVar;
+    ccColor4F endColor = {0.1f, 0.1f, 0.1f, 0.2f};
+    emitter.endColor = endColor;
+    ccColor4F endColorVar = {0.1f, 0.1f, 0.1f, 0.2f};
+    emitter.endColorVar = endColorVar;
+    
+    // size, in pixels
+    emitter.startSize = 20.0f;
+    emitter.startSizeVar = 10.0f;
+    emitter.endSize = kParticleStartSizeEqualToEndSize;
+    // emits per second
+    emitter.emissionRate = emitter.totalParticles/emitter.life;
+    // additive
+    emitter.blendAdditive = YES;
+    emitter.position = ccp(x,y);  // setting emitter position
+    [self addChild: emitter]; // adding the emitter
+    emitter.autoRemoveOnFinish = YES; // this removes/deallocs the emitter after its animation
 }
 
 - (void)gameOverDone {
@@ -219,7 +386,7 @@ float score = 0;
 // on "dealloc" you need to release all your retained objects
 - (void) dealloc
 {
-	// in case you have something to dealloc, do it in this method
+    // in case you have something to dealloc, do it in this method
 	// in this particular example nothing needs to be released.
 	// cocos2d will automatically release all the children (Label)
 	
@@ -231,16 +398,20 @@ float score = 0;
 
 -(void) onEnter
 {
+    NSLog(@"onEnter");
     [super onEnter];
-    robotOnline = NO;
-    [self appDidBecomeActive:nil];
-
 }
 
 -(void) onExit
 {
+    NSLog(@"onExit");
+    //[self appWillResignActive:nil];
+
     [super onExit];
-    [self appWillResignActive:nil];
+}
+-(void) onEnterTransitionDidFinish
+{
+    NSLog(@"onEnterTransitionDidFinish");
 }
 
 #pragma mark GameKit delegate
@@ -258,60 +429,6 @@ float score = 0;
 }
 
 // Sphero functions
--(void)setupRobotConnection {
-    NSLog(@"setupRobotConnection");
-    /*Try to connect to the robot*/
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleRobotOnline) name:RKDeviceConnectionOnlineNotification object:nil];
-    if ([[RKRobotProvider sharedRobotProvider] isRobotUnderControl]) {
-        [[RKRobotProvider sharedRobotProvider] openRobotConnection];
-    }
-}
-
-- (void)handleRobotOnline {
-    NSLog(@"handleRobotOnline");
-    /*The robot is now online, we can begin sending commands*/
-    if(!robotOnline) {
-        /* Send commands to Sphero Here: */
-        [self schedule:@selector(nextFrame:)];
-        [RKBackLEDOutputCommand sendCommandWithBrightness:1.0];
-        
-        [RKStabilizationCommand sendCommandWithState:RKStabilizationStateOff];
-        
-        [self sendSetDataStreamingCommand];
-        ////Register for asynchronise data streaming packets
-        [[RKDeviceMessenger sharedMessenger] addDataStreamingObserver:self selector:@selector(handleAsyncData:)];
-        
-        [RKRGBLEDOutputCommand sendCommandWithRed:1.0 green:0.0 blue:0.0];
-    }
-    robotOnline = YES;
-}
-
--(void)appDidBecomeActive:(NSNotification*)notification {
-    NSLog(@"appDidBecomeActive");
-    /*When the application becomes active after entering the background we try to connect to the robot*/
-    [self setupRobotConnection];
-}
--(void)appWillResignActive:(NSNotification*)notification {
-    NSLog(@"appWillResignActive");
-    /*When the application is entering the background we need to close the connection to the robot*/
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:RKDeviceConnectionOnlineNotification object:nil];
-    
-    // Turn off data streaming
-    [RKSetDataStreamingCommand sendCommandWithSampleRateDivisor:0
-                                                   packetFrames:0
-                                                     sensorMask:RKDataStreamingMaskOff
-                                                    packetCount:0];
-    // Unregister for async data packets
-    [[RKDeviceMessenger sharedMessenger] removeDataStreamingObserver:self];
-    
-    // Restore stabilization (the control unit)
-    [RKStabilizationCommand sendCommandWithState:RKStabilizationStateOn];
-    
-    // Close the connection
-    [[RKRobotProvider sharedRobotProvider] closeRobotConnection];
-    
-    robotOnline = NO;
-}
 
 -(void)sendSetDataStreamingCommand {
     
@@ -370,8 +487,8 @@ float score = 0;
         RKAttitudeData *attitudeData = sensorsData.attitudeData;
 //        RKQuaternionData *quaternionData = sensorsData.quaternionData;
 
-        NSLog(@"Yaw %f", attitudeData.yaw);
-        center.rotation = -attitudeData.yaw;
+//        NSLog(@"Yaw %f", attitudeData.yaw);
+        center.rotation =  -attitudeData.yaw;
         for (CCSprite *dotDude in _dots) {
             dotDude.rotation = -1 * center.rotation;
         }

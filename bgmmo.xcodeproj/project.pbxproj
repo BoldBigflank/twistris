@@ -150,6 +150,12 @@
 		FA91B77615CDD5D200C744B3 /* seeker.png in Resources */ = {isa = PBXBuildFile; fileRef = FA91B77515CDD5D200C744B3 /* seeker.png */; };
 		FAD2101F15EC82CA00523413 /* dot.png in Resources */ = {isa = PBXBuildFile; fileRef = FAD2101D15EC82CA00523413 /* dot.png */; };
 		FAD2102015EC82CA00523413 /* dot@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FAD2101E15EC82CA00523413 /* dot@2x.png */; };
+		FAD2102315ED509800523413 /* starField.plist in Resources */ = {isa = PBXBuildFile; fileRef = FAD2102215ED509800523413 /* starField.plist */; };
+		FAD2102815ED52CA00523413 /* Stars1.plist in Resources */ = {isa = PBXBuildFile; fileRef = FAD2102715ED52CA00523413 /* Stars1.plist */; };
+		FAD2102B15ED604E00523413 /* star.png in Resources */ = {isa = PBXBuildFile; fileRef = FAD2102915ED604E00523413 /* star.png */; };
+		FAD2102C15ED604E00523413 /* star@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FAD2102A15ED604E00523413 /* star@2x.png */; };
+		FAD2102F15ED638900523413 /* ring.png in Resources */ = {isa = PBXBuildFile; fileRef = FAD2102D15ED638900523413 /* ring.png */; };
+		FAD2103015ED638900523413 /* ring@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FAD2102E15ED638900523413 /* ring@2x.png */; };
 		FAD64B8F15E5A04300BDDD04 /* SpriteCopter.m in Sources */ = {isa = PBXBuildFile; fileRef = FAD64B8E15E5A04300BDDD04 /* SpriteCopter.m */; };
 /* End PBXBuildFile section */
 
@@ -437,6 +443,12 @@
 		FA91B77515CDD5D200C744B3 /* seeker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = seeker.png; path = Resources/seeker.png; sourceTree = "<group>"; };
 		FAD2101D15EC82CA00523413 /* dot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dot.png; sourceTree = "<group>"; };
 		FAD2101E15EC82CA00523413 /* dot@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dot@2x.png"; sourceTree = "<group>"; };
+		FAD2102215ED509800523413 /* starField.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = starField.plist; sourceTree = "<group>"; };
+		FAD2102715ED52CA00523413 /* Stars1.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Stars1.plist; path = Particles/Stars1.plist; sourceTree = "<group>"; };
+		FAD2102915ED604E00523413 /* star.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = star.png; sourceTree = "<group>"; };
+		FAD2102A15ED604E00523413 /* star@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "star@2x.png"; sourceTree = "<group>"; };
+		FAD2102D15ED638900523413 /* ring.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ring.png; sourceTree = "<group>"; };
+		FAD2102E15ED638900523413 /* ring@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ring@2x.png"; sourceTree = "<group>"; };
 		FAD64B8D15E5A04300BDDD04 /* SpriteCopter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpriteCopter.h; sourceTree = "<group>"; };
 		FAD64B8E15E5A04300BDDD04 /* SpriteCopter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpriteCopter.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -506,6 +518,7 @@
 		FA91B5EA15CDCE8200C744B3 /* bgmmo */ = {
 			isa = PBXGroup;
 			children = (
+				FAD2102615ED52BD00523413 /* Particles */,
 				FA91B76715CDCE8400C744B3 /* AppDelegate.h */,
 				FA91B76815CDCE8400C744B3 /* AppDelegate.m */,
 				FA91B76A15CDCE8400C744B3 /* HelloWorldLayer.h */,
@@ -526,6 +539,10 @@
 		FA91B5EB15CDCE8200C744B3 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				FAD2102D15ED638900523413 /* ring.png */,
+				FAD2102E15ED638900523413 /* ring@2x.png */,
+				FAD2102915ED604E00523413 /* star.png */,
+				FAD2102A15ED604E00523413 /* star@2x.png */,
 				FAD2101D15EC82CA00523413 /* dot.png */,
 				FAD2101E15EC82CA00523413 /* dot@2x.png */,
 				FA08737915EAFFFC001ADBF4 /* bee.png */,
@@ -549,6 +566,7 @@
 				FA91B60015CDCE8200C744B3 /* Icon@2x.png */,
 				FA91B60215CDCE8200C744B3 /* Info.plist */,
 				FA91B60315CDCE8200C744B3 /* iTunesArtwork */,
+				FAD2102215ED509800523413 /* starField.plist */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -900,6 +918,14 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		FAD2102615ED52BD00523413 /* Particles */ = {
+			isa = PBXGroup;
+			children = (
+				FAD2102715ED52CA00523413 /* Stars1.plist */,
+			);
+			name = Particles;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -974,6 +1000,12 @@
 				FA08737C15EAFFFD001ADBF4 /* bee@2x.png in Resources */,
 				FAD2101F15EC82CA00523413 /* dot.png in Resources */,
 				FAD2102015EC82CA00523413 /* dot@2x.png in Resources */,
+				FAD2102315ED509800523413 /* starField.plist in Resources */,
+				FAD2102815ED52CA00523413 /* Stars1.plist in Resources */,
+				FAD2102B15ED604E00523413 /* star.png in Resources */,
+				FAD2102C15ED604E00523413 /* star@2x.png in Resources */,
+				FAD2102F15ED638900523413 /* ring.png in Resources */,
+				FAD2103015ED638900523413 /* ring@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1101,6 +1133,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Alex Swan (LKXS5ASC86)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -1113,6 +1146,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1122,6 +1156,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Alex Swan (LKXS5ASC86)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -1132,6 +1167,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

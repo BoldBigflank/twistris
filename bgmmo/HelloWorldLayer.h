@@ -24,6 +24,8 @@
     
     BOOL robotOnline;
     CCParticleFire *sun;
+    CCParticleSystem *starField;
+    CCParticleSystem *emitter;
     int  packetCounter;
     int maxDots;
     int radius;
