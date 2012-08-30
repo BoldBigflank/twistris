@@ -188,6 +188,7 @@
     NSLog(@"handleRobotOnline");
     /*The robot is now online, we can begin sending commands*/
     if(!robotOnline) {
+        self.hasResumed = YES;
         /* Send commands to Sphero Here: */
         [RKBackLEDOutputCommand sendCommandWithBrightness:1.0];
 //        [RKRGBLEDOutputCommand sendCommandWithRed:1.0 green:0.0 blue:0.0];
