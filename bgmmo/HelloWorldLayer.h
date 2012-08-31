@@ -31,11 +31,12 @@
     int maxDots;
     int radius;
     
-    
+    CCLabelTTF *_label;   
 }
 
 // returns a CCScene that contains the HelloWorldLayer as the only child
 +(CCScene *) scene;
 - (id)initWithHUD:(HUDLayer *)hud;
+- (void) resetGame;
 
 @end

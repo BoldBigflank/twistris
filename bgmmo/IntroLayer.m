@@ -61,8 +61,7 @@
 
 -(void) makeTransition:(ccTime)dt
 {
-    GameOverScene *gameOverScene = [GameOverScene node];
-    [gameOverScene.layer.label setString:@"Tap the screen to lift your copter"];
-	[[CCDirector sharedDirector] pushScene:gameOverScene];
+    
+    [[CCDirector sharedDirector] replaceScene:[HelloWorldLayer scene]];
 }
 @end

@@ -18,6 +18,7 @@
 	CCDirectorIOS	*director_;							// weak ref
 }
 
+-(void)setupRobotConnection;
 @property (nonatomic, retain) UIWindow *window;
 @property (nonatomic) BOOL robotOnline;
 @property (nonatomic) BOOL hasResumed;

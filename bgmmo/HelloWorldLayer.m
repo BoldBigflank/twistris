@@ -63,7 +63,8 @@ bool gameInProgress;
 // Replace beginning of init with the following
 - (id)initWithHUD:(HUDLayer *)hud
 {
-    if ((self = [super init])) {
+    if( (self=[super initWithColor:ccc4(0, 0, 0, 255)] )) {
+        self.tag = 111;
         [[SimpleAudioEngine sharedEngine] playBackgroundMusic:@"dreaming.wav"];
         _hud = hud;
         _targets = [[NSMutableArray alloc] init];
@@ -73,109 +74,111 @@ bool gameInProgress;
         // always call "super" init
         // Apple recommends to re-assign "self" with the "super's" return value
         // 91, 150, 239, 255
-        if( (self=[super initWithColor:ccc4(0, 0, 0, 255)] )) {
-            [_hud setStatusString:[NSString stringWithFormat:@""]];
-            CGSize winSize = [[CCDirector sharedDirector] winSize];
-            radius = winSize.width * RADIUS_RATIO;
+    
+        [_hud setStatusString:[NSString stringWithFormat:@""]];
+        [_hud setScoreString:[NSString stringWithFormat:@""]];
+        CGSize winSize = [[CCDirector sharedDirector] winSize];
+        radius = winSize.width * RADIUS_RATIO;
+        
+        CCParticleRain *starSplat = [[CCParticleRain alloc] initWithTotalParticles:300];
+        starSplat.texture = [[CCTextureCache sharedTextureCache] addImage:@"star.png"];
+        starSplat.duration = 1;
+        starSplat.emissionRate = 3200;
+        starSplat.life = 8;
+        starSplat.lifeVar = 0;
+        starSplat.startSize = 2;
+        starSplat.startSizeVar = 1;
+        starSplat.endSize = 2;
+        starSplat.endSizeVar = 1;
+        starSplat.angle = 180;
+        starSplat.angleVar = 0;
+        starSplat.rotation = 0;
+        starSplat.gravity = ccp(0, 0);
+        starSplat.speed = winSize.width/8;
+        starSplat.speedVar = 5;
+        starSplat.radialAccel = 0;
+        starSplat.radialAccelVar = 0;
+        starSplat.tangentialAccel = 0;
+        starSplat.tangentialAccelVar = 0;
+        starSplat.position = ccp(winSize.width/2, winSize.height/2);
+        starSplat.posVar = ccp(winSize.width/2, winSize.height/2);
+        ccColor4F startColor = {1.0f, 1.0f, 1.0f, 1.0f};
+        starSplat.startColor = startColor;
+        ccColor4F startColorVar = {0.2f, 0.25f, 0.2f, 0.29f};
+        starSplat.startColorVar = startColorVar;
+        ccColor4F endColor = {1.0f, 1.0f, 1.0f, 1.0f};
+        starSplat.endColor = endColor;
+        ccColor4F endColorVar = {0.0f, 0.0f, 0.0f, 0.0f};
+        starSplat.endColorVar = endColorVar;
+        starSplat.autoRemoveOnFinish = YES;
+        [self addChild:starSplat];
+        
+        starField = [[CCParticleRain alloc] initWithTotalParticles:400];
+        starField.texture = [[CCTextureCache sharedTextureCache] addImage:@"star.png"];
+        starField.duration = -1;
+        starField.life = 8;
+        starField.lifeVar = 0;
+        starField.startSize = 2;
+        starField.startSizeVar = 1;
+        starField.endSize = 2;
+        starField.endSizeVar = 1;
+        starField.angle = 180;
+        starField.angleVar = 0;
+        starField.rotation = 0;
+        starField.gravity = ccp(0, 0);
+        starField.speed = winSize.width/8;
+        starField.speedVar = 5;
+        starField.radialAccel = 0;
+        starField.radialAccelVar = 0;
+        starField.tangentialAccel = 0;
+        starField.tangentialAccelVar = 0;
+        starField.position = ccp(winSize.width, winSize.height/2);
+        starField.posVar = ccp(0, winSize.height/2);
+        starField.startColor = startColor;
+        starField.startColorVar = startColorVar;
+        starField.endColor = endColor;
+        starField.endColorVar = endColorVar;
+        [self addChild:starField];
+        
+        // The center points for the dot
+        center = [CCNode node];
+        center.position = CGPointMake(radius +10, winSize.height/2);
+        [self addChild:center];
+        
+        center.scale = .1;
+        [center runAction:[CCScaleTo actionWithDuration:1 scale:1.0]];
+        
+        CCSprite *ring = [CCSprite spriteWithFile:@"ring.png"];
+        [center addChild:ring];
+        ring.scale = 2 * radius / ring.contentSize.width;
+        //        ring.position = ccp(  ring.contentSize.width - radius, ring.scale * ring.contentSize.height/2);
+        // Create the dots
+        while([_dots count] < MAX_DOTS){
             
-            CCParticleRain *starSplat = [[CCParticleRain alloc] initWithTotalParticles:300];
-            starSplat.texture = [[CCTextureCache sharedTextureCache] addImage:@"star.png"];
-            starSplat.duration = 1;
-            starSplat.emissionRate = 3200;
-            starSplat.life = 8;
-            starSplat.lifeVar = 0;
-            starSplat.startSize = 2;
-            starSplat.startSizeVar = 1;
-            starSplat.endSize = 2;
-            starSplat.endSizeVar = 1;
-            starSplat.angle = 180;
-            starSplat.angleVar = 0;
-            starSplat.rotation = 0;
-            starSplat.gravity = ccp(0, 0);
-            starSplat.speed = winSize.width/8;
-            starSplat.speedVar = 5;
-            starSplat.radialAccel = 0;
-            starSplat.radialAccelVar = 0;
-            starSplat.tangentialAccel = 0;
-            starSplat.tangentialAccelVar = 0;
-            starSplat.position = ccp(winSize.width/2, winSize.height/2);
-            starSplat.posVar = ccp(winSize.width/2, winSize.height/2);
-            ccColor4F startColor = {1.0f, 1.0f, 1.0f, 1.0f};
-            starSplat.startColor = startColor;
-            ccColor4F startColorVar = {0.2f, 0.25f, 0.2f, 0.29f};
-            starSplat.startColorVar = startColorVar;
-            ccColor4F endColor = {1.0f, 1.0f, 1.0f, 1.0f};
-            starSplat.endColor = endColor;
-            ccColor4F endColorVar = {0.0f, 0.0f, 0.0f, 0.0f};
-            starSplat.endColorVar = endColorVar;
-            starSplat.autoRemoveOnFinish = YES;
-            [self addChild:starSplat];
-            
-            starField = [[CCParticleRain alloc] initWithTotalParticles:400];
-            starField.texture = [[CCTextureCache sharedTextureCache] addImage:@"star.png"];
-            starField.duration = -1;
-            starField.life = 8;
-            starField.lifeVar = 0;
-            starField.startSize = 2;
-            starField.startSizeVar = 1;
-            starField.endSize = 2;
-            starField.endSizeVar = 1;
-            starField.angle = 180;
-            starField.angleVar = 0;
-            starField.rotation = 0;
-            starField.gravity = ccp(0, 0);
-            starField.speed = winSize.width/8;
-            starField.speedVar = 5;
-            starField.radialAccel = 0;
-            starField.radialAccelVar = 0;
-            starField.tangentialAccel = 0;
-            starField.tangentialAccelVar = 0;
-            starField.position = ccp(winSize.width, winSize.height/2);
-            starField.posVar = ccp(0, winSize.height/2);
-            starField.startColor = startColor;
-            starField.startColorVar = startColorVar;
-            starField.endColor = endColor;
-            starField.endColorVar = endColorVar;
-            [self addChild:starField];
-            
-            // The center points for the dot
-            center = [CCNode node];
-            center.position = CGPointMake(radius +10, winSize.height/2);
-            [self addChild:center];
-            
-            center.scale = .1;
-            [center runAction:[CCScaleTo actionWithDuration:1 scale:1.0]];
-            
-            CCSprite *ring = [CCSprite spriteWithFile:@"ring.png"];
-            [center addChild:ring];
-            ring.scale = 2 * radius / ring.contentSize.width;
-            //        ring.position = ccp(  ring.contentSize.width - radius, ring.scale * ring.contentSize.height/2);
-            // Create the dots
-            while([_dots count] < MAX_DOTS){
-                
 //                CCSprite *dotDude = [CCSprite spriteWithFile: @"dot.png"];
-                ccColor3B dotColor = {204, 102, 255};
-                CCSprite *dotDude = [self rectangleSpriteWithSize:CGSizeMake(radius * DOT_RATIO, radius * DOT_RATIO) color:dotColor];
+            ccColor3B dotColor = {204, 102, 255};
+            CCSprite *dotDude = [self rectangleSpriteWithSize:CGSizeMake(radius * DOT_RATIO, radius * DOT_RATIO) color:dotColor];
 //                dotDude.scaleX = (radius/5) / dotDude.contentSize.width ;
 //                dotDude.scaleY = (radius/5) / dotDude.contentSize.height ;
-                [center addChild:dotDude];
-                [_dots addObject:dotDude];
-            }
-            
-            // Space the dots
-            for (CCNode *dotDude in _dots) {
-                // Radians position
-                int index = [_dots indexOfObject:dotDude];
-                float angle = 2 * M_PI / _dots.count * index; // Degrees
-                dotDude.position = ccp( cos(angle) * radius, sin(angle) * radius );
-                dotDude.rotation = -1 * center.rotation;
-            }
-            
-            // schedule a repeating callback on every frame
-            [self schedule:@selector(nextFrame:)];
-            self.isTouchEnabled = YES;        
+            [center addChild:dotDude];
+            [_dots addObject:dotDude];
         }
         
+        // Space the dots
+        for (CCNode *dotDude in _dots) {
+            // Radians position
+            int index = [_dots indexOfObject:dotDude];
+            float angle = 2 * M_PI / _dots.count * index; // Degrees
+            dotDude.position = ccp( cos(angle) * radius, sin(angle) * radius );
+            dotDude.rotation = -1 * center.rotation;
+        }
+        
+        // schedule a repeating callback on every frame
+        [self schedule:@selector(nextFrame:)];
+        self.isTouchEnabled = YES;
+        //[_hud showRestartMenu:-1];
+        //[self resetGame];
+        [_hud showRestartMenu:(int)score];
     }
     return self;
 }
@@ -192,7 +195,8 @@ bool gameInProgress;
 {
     CGSize winSize = [[CCDirector sharedDirector] winSize];
     int minY = winSize.height/2 - radius;
-    int actualY = minY + (arc4random() % (int)(2/DOT_RATIO))* 4/DOT_RATIO; // random
+    int actualY = minY + (arc4random() % (2 * radius));
+//    int actualY = minY + (arc4random() % (int)(2/DOT_RATIO))* 4 / DOT_RATIO; // random
     
     CCSprite *beeDude = [CCSprite spriteWithFile: @"square.png"];
     beeDude.scaleX = (radius * DOT_RATIO) / beeDude.contentSize.width ;
@@ -233,8 +237,11 @@ bool gameInProgress;
 
 - (void) resetGame
 {
+    NSLog(@"resetGame");
+    NSArray *beeDudesToDelete = [[NSArray alloc] initWithArray:_targets];
+    
     // Reset old stuff
-    for(CCSprite *beeDude in _targets){
+    for(CCSprite *beeDude in beeDudesToDelete){
         [_targets removeObject:beeDude];
         [self removeChild:beeDude cleanup:YES ];
     }
@@ -249,15 +256,16 @@ bool gameInProgress;
     // Start new scores
     score = 0;
     lives = MAX_LIVES;
+    [_hud setStatusString:[NSString stringWithFormat:@"Lives: %i", lives]];
     gameInProgress = YES;
-
+    [self schedule:@selector(nextFrame:)];
 }
 
 - (void) nextFrame:(ccTime)dt {
     NSMutableArray *beeDudesToDelete = [[NSMutableArray alloc] init];
     CGSize winSize = [[CCDirector sharedDirector] winSize];
     AppController *appD = (AppController *)[[UIApplication sharedApplication] delegate];
-    center.rotation =  -1 * [appD currentYaw];
+    if([appD robotOnline]) center.rotation =  -1 * [appD currentYaw];
     for (CCSprite *dotDude in _dots) {
         dotDude.rotation = -1 * center.rotation;
     }
@@ -267,12 +275,11 @@ bool gameInProgress;
         [RKRGBLEDOutputCommand sendCommandWithRed:red green:green blue:0.0];
         appD.hasResumed = FALSE;
     }
-//    if(!appD.robotOnline){
-//        [[CCDirector sharedDirector] pause];
-//    }
+    //[_hud showSpheroMenu:![appD robotOnline]];
     
     // Update the score
     if(gameInProgress) score += dt*10;
+    [_hud setScoreString:[NSString stringWithFormat:@"Score: %i", (int)score]];
     int vx = winSize.width/3 + score/3;
     
     
@@ -324,7 +331,8 @@ bool gameInProgress;
                     [_hud setStatusString:[NSString stringWithFormat:@"Lives: %d", lives+1]];
                     if(lives<0){
                         [self unschedule:@selector(nextFrame:)];
-                        [self gameOverDone];
+                        gameInProgress = NO;
+                        [self endGame];
                     }
                     // Change the color of the ball
                     float red = min(1.0, 2 * (float)(MAX_LIVES - lives)/MAX_LIVES) ;
@@ -411,7 +419,11 @@ bool gameInProgress;
     emitter.autoRemoveOnFinish = YES; // this removes/deallocs the emitter after its animation
 }
 
-- (void)gameOverDone {
+- (void)endGame {
+    // Blow up the disk
+    
+    // Delete the beeDudes
+    
     [_hud showRestartMenu:(int)score];
 //    GameOverScene *gameOverScene = [GameOverScene node];
 //    [gameOverScene.layer.label setString:[NSString stringWithFormat:@"Your Score: %i", (int)score]];
@@ -420,12 +432,30 @@ bool gameInProgress;
 }
 
 - (BOOL)ccTouchBegan:(UITouch *)touch withEvent:(UIEvent *)event {
-    // Reverse direction of the seeker
+    // Save the position to calculate the angle
     return YES;
 }
 
 - (void)ccTouchEnded:(UITouch *)touch withEvent:(UIEvent *)event {
     // Return the direction of seeker
+}
+
+- (void)ccTouchMoved:(UITouch *)touch withEvent:(UIEvent *)event {
+    if(!gameInProgress) return;
+    CGPoint touchLocation = [center convertTouchToNodeSpace:touch];
+    
+    CGPoint oldTouchLocation = [touch previousLocationInView:touch.view];
+    oldTouchLocation = [[CCDirector sharedDirector] convertToGL:oldTouchLocation];
+    oldTouchLocation = [center convertToNodeSpace:oldTouchLocation];
+        
+    CGFloat rotateAngle = ccpToAngle( oldTouchLocation) - ccpToAngle(touchLocation);
+    float newAngle = center.rotation + CC_RADIANS_TO_DEGREES(rotateAngle);
+    
+    if(!isnan(newAngle)) [center setRotation:newAngle];
+    for(CCNode *dotDude in _dots){
+        dotDude.rotation = -center.rotation;
+    }
+
 }
 
 -(void) registerWithTouchDispatcher
@@ -443,6 +473,8 @@ bool gameInProgress;
 	// don't forget to call "super dealloc"
     [_targets release];
     _targets = nil;
+    [_label release];
+    _label = nil;
 	[super dealloc];
 }
 
@@ -474,83 +506,5 @@ bool gameInProgress;
 	[[app navController] dismissModalViewControllerAnimated:YES];
 }
 
-// Sphero functions
-
--(void)sendSetDataStreamingCommand {
-    
-    // Requesting the Accelerometer X, Y, and Z filtered (in Gs)
-    //            the IMU Angles roll, pitch, and yaw (in degrees)
-    //            the Quaternion data q0, q1, q2, and q3 (in 1/10000) of a Q
-    RKDataStreamingMask mask =  RKDataStreamingMaskAccelerometerFilteredAll |
-    RKDataStreamingMaskIMUAnglesFilteredAll   |
-    RKDataStreamingMaskQuaternionAll;
-    
-    // Note: If your ball has Firmware < 1.20 then these Quaternions
-    //       will simply show up as zeros.
-    
-    // Sphero samples this data at 400 Hz.  The divisor sets the sample
-    // rate you want it to store frames of data.  In this case 400Hz/40 = 10Hz
-    uint16_t divisor = 40;
-    
-    // Packet frames is the number of frames Sphero will store before it sends
-    // an async data packet to the iOS device
-    uint16_t packetFrames = 1;
-    
-    // Count is the number of async data packets Sphero will send you before
-    // it stops.  You want to register for a finite count and then send the command
-    // again once you approach the limit.  Otherwise data streaming may be left
-    // on when your app crashes, putting Sphero in a bad state.
-    uint8_t count = TOTAL_PACKET_COUNT;
-    
-    // Reset finite packet counter
-    packetCounter = 0;
-    
-    // Send command to Sphero
-    [RKSetDataStreamingCommand sendCommandWithSampleRateDivisor:divisor
-                                                   packetFrames:packetFrames
-                                                     sensorMask:mask
-                                                    packetCount:count];
-    
-}
-
-- (void)handleAsyncData:(RKDeviceAsyncData *)asyncData
-{
-    // Need to check which type of async data is received as this method will be called for
-    // data streaming packets and sleep notification packets. We are going to ingnore the sleep
-    // notifications.
-    if ([asyncData isKindOfClass:[RKDeviceSensorsAsyncData class]]) {
-        
-        // If we are getting close to packet limit, request more
-        packetCounter++;
-        if( packetCounter > (TOTAL_PACKET_COUNT-PACKET_COUNT_THRESHOLD)) {
-            [self sendSetDataStreamingCommand];
-        }
-        
-        // Received sensor data, so display it to the user.
-        RKDeviceSensorsAsyncData *sensorsAsyncData = (RKDeviceSensorsAsyncData *)asyncData;
-        RKDeviceSensorsData *sensorsData = [sensorsAsyncData.dataFrames lastObject];
-//        RKAccelerometerData *accelerometerData = sensorsData.accelerometerData;
-        RKAttitudeData *attitudeData = sensorsData.attitudeData;
-//        RKQuaternionData *quaternionData = sensorsData.quaternionData;
-
-        center.rotation =  -attitudeData.yaw;
-        for (CCSprite *dotDude in _dots) {
-            dotDude.rotation = -1 * center.rotation;
-        }
-        //[RKCalibrateCommand sendCommandWithHeading:0.0];
-        
-        // Print data to the text fields
-//        self.xValueLabel.text = [NSString stringWithFormat:@"%.6f", accelerometerData.acceleration.x];
-//        self.yValueLabel.text = [NSString stringWithFormat:@"%.6f", accelerometerData.acceleration.y];
-//        self.zValueLabel.text = [NSString stringWithFormat:@"%.6f", accelerometerData.acceleration.z];
-//        self.pitchValueLabel.text = [NSString stringWithFormat:@"%.0f", attitudeData.pitch];
-//        self.rollValueLabel.text = [NSString stringWithFormat:@"%.0f", attitudeData.roll];
-//        self.yawValueLabel.text = [NSString stringWithFormat:@"%.0f", attitudeData.yaw];
-//        self.q0ValueLabel.text = [NSString stringWithFormat:@"%d", quaternionData.quaternions.q0];
-//        self.q1ValueLabel.text = [NSString stringWithFormat:@"%d", quaternionData.quaternions.q1];
-//        self.q2ValueLabel.text = [NSString stringWithFormat:@"%d", quaternionData.quaternions.q2];
-//        self.q3ValueLabel.text = [NSString stringWithFormat:@"%d", quaternionData.quaternions.q3];
-    }
-}
 
 @end
