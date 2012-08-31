@@ -9,7 +9,6 @@
 #import "cocos2d.h"
 
 @interface HUDLayer : CCLayer {
-    CCLabelBMFont * _statusLabel;
     CCLabelBMFont * _scoreLabel;
     
     CCMenu *_spheroMenu;
@@ -18,7 +17,6 @@
 
 - (void)showSpheroMenu:(bool)v;
 - (void)showRestartMenu:(int)score;
-- (void)setStatusString:(NSString *)string;
 - (void)setScoreString:(NSString *)string;
 
 

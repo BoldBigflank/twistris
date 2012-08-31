@@ -17,9 +17,6 @@
     if ((self = [super init])) {
         
         CGSize winSize = [CCDirector sharedDirector].winSize;
-        _statusLabel = [CCLabelTTF labelWithString:@"Lives" fontName:@"Arial" fontSize:32];
-        _statusLabel.position = ccp(winSize.width* 0.85, winSize.height * 0.9);
-        [self addChild:_statusLabel];
         
         _scoreLabel = [CCLabelTTF labelWithString:@"Score" fontName:@"Arial" fontSize:32];
         _scoreLabel.position = ccp(winSize.width * 0.15, winSize.height * 0.9);
@@ -50,10 +47,6 @@
     NSLog(@"Sphero button tapped");
     AppController *appD = (AppController *)[[UIApplication sharedApplication] delegate];
     if( [appD robotOnline] == NO ) [appD setupRobotConnection];
-}
-
-- (void)setStatusString:(NSString *)string {
-    _statusLabel.string = string;
 }
 
 - (void)setScoreString:(NSString *)string {

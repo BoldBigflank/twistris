@@ -74,7 +74,6 @@ bool gameInProgress;
         // Apple recommends to re-assign "self" with the "super's" return value
         // 91, 150, 239, 255
     
-        [_hud setStatusString:[NSString stringWithFormat:@""]];
         [_hud setScoreString:[NSString stringWithFormat:@""]];
         CGSize winSize = [[CCDirector sharedDirector] winSize];
         radius = winSize.width * RADIUS_RATIO;
@@ -253,7 +252,6 @@ bool gameInProgress;
     // Start new scores
     score = 0;
     lives = MAX_HP;
-    [_hud setStatusString:[NSString stringWithFormat:@"Lives: %i", lives]];
     gameInProgress = YES;
     [self schedule:@selector(nextFrame:)];
 }
@@ -331,7 +329,6 @@ bool gameInProgress;
                 float green = max(0.0, (float)dotDude.hp/MAX_HP);
                 ccColor3B dotColor = {(int)255*red, (int)255*green, 0};
                 dotDude.color = dotColor;
-                NSLog(@"HP %i %d", dotDude.hp, dotColor.r);
                 [RKRGBLEDOutputCommand sendCommandWithRed:red green:green blue:0.0];
                     
             }
