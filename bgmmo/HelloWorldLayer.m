@@ -315,6 +315,7 @@ bool gameInProgress;
                 dotDude.contentSize.height * dotDude.scaleY
             );
             if (CGRectIntersectsRect(dotDudeRect, beeDudeRect)) {
+                
                 [beeDudesToDelete addObject:beeDude];
                 
                 [self createExplosionX:position.x y:position.y];
@@ -330,7 +331,6 @@ bool gameInProgress;
                 ccColor3B dotColor = {(int)255*red, (int)255*green, 0};
                 dotDude.color = dotColor;
                 [RKRGBLEDOutputCommand sendCommandWithRed:red green:green blue:0.0];
-                    
             }
             
         }

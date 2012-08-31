@@ -217,8 +217,8 @@
     //       will simply show up as zeros.
     
     // Sphero samples this data at 400 Hz.  The divisor sets the sample
-    // rate you want it to store frames of data.  In this case 400Hz/40 = 10Hz
-    uint16_t divisor = 40;
+    // rate you want it to store frames of data.  In this case 400Hz/20 = 20Hz
+    uint16_t divisor = 20;
     
     // Packet frames is the number of frames Sphero will store before it sends
     // an async data packet to the iOS device
