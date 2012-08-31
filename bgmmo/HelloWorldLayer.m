@@ -348,66 +348,38 @@ bool gameInProgress;
 
 -(void) createExplosionX:(float)x y:(float)y
 {
-    [emitter resetSystem];
-    //	ParticleSystem *emitter = [RockExplosion node];
-    self->emitter = [[CCParticleSystemQuad alloc] initWithTotalParticles:30];
-    emitter.texture = [[CCTextureCache sharedTextureCache] addImage: @"Icon.png"];
-    
-    // duration
-    //	emitter.duration = -1; //continuous effect
-    emitter.duration = 1;
-    
-    // gravity
-    emitter.gravity = CGPointZero;
-    
-    // angle
-    emitter.angle = 90;
-    emitter.angleVar = 360;
-    
-    // speed of particles
-    emitter.speed = 160;
-    emitter.speedVar = 20;
-    
-    // radial
-    emitter.radialAccel = -120;
-    emitter.radialAccelVar = 0;
-    
-    // tagential
-    emitter.tangentialAccel = 30;
-    emitter.tangentialAccelVar = 0;
-    
-    // life of particles
-    emitter.life = 1;
-    emitter.lifeVar = 1;
-    
-    // spin of particles
-    emitter.startSpin = 0;
-    emitter.startSpinVar = 0;
-    emitter.endSpin = 0;
-    emitter.endSpinVar = 0;
-    
-    // color of particles
-    
-    ccColor4F startColor = {0.5f, 0.5f, 0.5f, 1.0f};
-    emitter.startColor = startColor;
-    ccColor4F startColorVar = {0.5f, 0.5f, 0.5f, 1.0f};
-    emitter.startColorVar = startColorVar;
-    ccColor4F endColor = {0.1f, 0.1f, 0.1f, 0.2f};
-    emitter.endColor = endColor;
-    ccColor4F endColorVar = {0.1f, 0.1f, 0.1f, 0.2f};
-    emitter.endColorVar = endColorVar;
-    
-    // size, in pixels
-    emitter.startSize = 20.0f;
-    emitter.startSizeVar = 10.0f;
-    emitter.endSize = kParticleStartSizeEqualToEndSize;
-    // emits per second
-    emitter.emissionRate = emitter.totalParticles/emitter.life;
-    // additive
-    emitter.blendAdditive = YES;
-    emitter.position = ccp(x,y);  // setting emitter position
-    [self addChild: emitter]; // adding the emitter
-    emitter.autoRemoveOnFinish = YES; // this removes/deallocs the emitter after its animation
+    CCParticleRain *explosion = [[CCParticleRain alloc] initWithTotalParticles:200];
+    explosion.texture = [[CCTextureCache sharedTextureCache] addImage:@"fire.png"];
+    explosion.duration = .1;
+    explosion.emissionRate = 800;
+    explosion.life = .4;
+    explosion.lifeVar = .3;
+    explosion.startSize = 40;
+    explosion.startSizeVar = 30;
+    explosion.endSize = 0;
+    explosion.endSizeVar = 0;
+    explosion.angle = 0;
+    explosion.angleVar = 360;
+    explosion.rotation = 0;
+    explosion.gravity = CGPointZero;
+    explosion.speed = 72;
+    explosion.speedVar = 0;
+    explosion.radialAccel = 756.5;
+    explosion.radialAccelVar = 50;
+    explosion.tangentialAccel = 0;
+    explosion.tangentialAccelVar = 0;
+    explosion.position = ccp(x, y);
+    explosion.posVar = ccp(0,0);
+    ccColor4F startColor = {1.0f, 0.16f, 0.0f, 1.0f};
+    explosion.startColor = startColor;
+    ccColor4F startColorVar = {0.0f, 0.45f, 0.0f, 0.31f};
+    explosion.startColorVar = startColorVar;
+    ccColor4F endColor = {0.31f, 0.08f, 0.0f, 1.0f};
+    explosion.endColor = endColor;
+    ccColor4F endColorVar = {0.0f, 0.0f, 0.0f, 0.0f};
+    explosion.endColorVar = endColorVar;
+    explosion.autoRemoveOnFinish = YES;
+    [self addChild:explosion];
 }
 
 - (void)endGame {
