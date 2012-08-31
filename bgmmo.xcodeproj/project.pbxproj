@@ -161,7 +161,7 @@
 		FAD2102C15ED604E00523413 /* star@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FAD2102A15ED604E00523413 /* star@2x.png */; };
 		FAD2102F15ED638900523413 /* ring.png in Resources */ = {isa = PBXBuildFile; fileRef = FAD2102D15ED638900523413 /* ring.png */; };
 		FAD2103015ED638900523413 /* ring@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FAD2102E15ED638900523413 /* ring@2x.png */; };
-		FAD64B8F15E5A04300BDDD04 /* SpriteCopter.m in Sources */ = {isa = PBXBuildFile; fileRef = FAD64B8E15E5A04300BDDD04 /* SpriteCopter.m */; };
+		FAD64B8F15E5A04300BDDD04 /* DotDude.m in Sources */ = {isa = PBXBuildFile; fileRef = FAD64B8E15E5A04300BDDD04 /* DotDude.m */; };
 		FADC5A4315EDF497005394DE /* HUDLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = FADC5A4215EDF497005394DE /* HUDLayer.mm */; };
 		FADC5A4615EE048B005394DE /* square.png in Resources */ = {isa = PBXBuildFile; fileRef = FADC5A4415EE048B005394DE /* square.png */; };
 		FADC5A4715EE048B005394DE /* square@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FADC5A4515EE048B005394DE /* square@2x.png */; };
@@ -464,8 +464,8 @@
 		FAD2102A15ED604E00523413 /* star@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "star@2x.png"; sourceTree = "<group>"; };
 		FAD2102D15ED638900523413 /* ring.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ring.png; sourceTree = "<group>"; };
 		FAD2102E15ED638900523413 /* ring@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ring@2x.png"; sourceTree = "<group>"; };
-		FAD64B8D15E5A04300BDDD04 /* SpriteCopter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpriteCopter.h; sourceTree = "<group>"; };
-		FAD64B8E15E5A04300BDDD04 /* SpriteCopter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpriteCopter.m; sourceTree = "<group>"; };
+		FAD64B8D15E5A04300BDDD04 /* DotDude.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DotDude.h; sourceTree = "<group>"; };
+		FAD64B8E15E5A04300BDDD04 /* DotDude.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DotDude.m; sourceTree = "<group>"; };
 		FADC5A4115EDF497005394DE /* HUDLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HUDLayer.h; path = ../HUDLayer.h; sourceTree = "<group>"; };
 		FADC5A4215EDF497005394DE /* HUDLayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = HUDLayer.mm; path = ../HUDLayer.mm; sourceTree = "<group>"; };
 		FADC5A4415EE048B005394DE /* square.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = square.png; sourceTree = "<group>"; };
@@ -548,8 +548,8 @@
 				FA91B76B15CDCE8400C744B3 /* HelloWorldLayer.m */,
 				FA1BE53415E8416800B4DA6A /* GameOverScene.h */,
 				FA1BE53515E8416800B4DA6A /* GameOverScene.m */,
-				FAD64B8D15E5A04300BDDD04 /* SpriteCopter.h */,
-				FAD64B8E15E5A04300BDDD04 /* SpriteCopter.m */,
+				FAD64B8D15E5A04300BDDD04 /* DotDude.h */,
+				FAD64B8E15E5A04300BDDD04 /* DotDude.m */,
 				FA91B76D15CDCE8400C744B3 /* IntroLayer.h */,
 				FA91B76E15CDCE8400C744B3 /* IntroLayer.m */,
 				FA91B5EB15CDCE8200C744B3 /* Resources */,
@@ -1162,7 +1162,7 @@
 				FA91B76915CDCE8400C744B3 /* AppDelegate.m in Sources */,
 				FA91B76C15CDCE8400C744B3 /* HelloWorldLayer.m in Sources */,
 				FA91B76F15CDCE8400C744B3 /* IntroLayer.m in Sources */,
-				FAD64B8F15E5A04300BDDD04 /* SpriteCopter.m in Sources */,
+				FAD64B8F15E5A04300BDDD04 /* DotDude.m in Sources */,
 				FA1BE53615E8416800B4DA6A /* GameOverScene.m in Sources */,
 				FADC5A4315EDF497005394DE /* HUDLayer.mm in Sources */,
 			);

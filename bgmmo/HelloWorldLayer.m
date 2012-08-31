@@ -10,7 +10,7 @@
 // Import the interfaces
 #import "HelloWorldLayer.h"
 #import "CCTouchDispatcher.h"
-#import "SpriteCopter.h"
+#import "DotDude.h"
 #import "GameOverScene.h"
 #import "RobotUIKit/RobotUIKit.h"
 #import "SimpleAudioEngine.h"
@@ -23,7 +23,7 @@
 #define TOTAL_PACKET_COUNT 200
 #define PACKET_COUNT_THRESHOLD 50
 
-#define MAX_LIVES 9
+#define MAX_HP 9
 #define MAX_DOTS 3
 #define MAX_BEES 4
 #define DOT_RATIO .2
@@ -32,7 +32,6 @@
 CCNode *center;
 CCSprite *cloud;
 
-int standardAcceleration = -1;
 float score = 0;
 int lives;
 int radius;
@@ -155,17 +154,14 @@ bool gameInProgress;
         // Create the dots
         while([_dots count] < MAX_DOTS){
             
-//                CCSprite *dotDude = [CCSprite spriteWithFile: @"dot.png"];
-            ccColor3B dotColor = {204, 102, 255};
-            CCSprite *dotDude = [self rectangleSpriteWithSize:CGSizeMake(radius * DOT_RATIO, radius * DOT_RATIO) color:dotColor];
-//                dotDude.scaleX = (radius/5) / dotDude.contentSize.width ;
-//                dotDude.scaleY = (radius/5) / dotDude.contentSize.height ;
+            DotDude *dotDude = [DotDude dotDudeWithSize:(int)(radius * DOT_RATIO) hp:MAX_HP];
+            //DotDude *dotDude = [self rectangleSpriteWithSize:CGSizeMake(radius * DOT_RATIO, radius * DOT_RATIO) color:dotColor];
             [center addChild:dotDude];
             [_dots addObject:dotDude];
         }
         
         // Space the dots
-        for (CCNode *dotDude in _dots) {
+        for (DotDude *dotDude in _dots) {
             // Radians position
             int index = [_dots indexOfObject:dotDude];
             float angle = 2 * M_PI / _dots.count * index; // Degrees
@@ -248,14 +244,15 @@ bool gameInProgress;
     while([_targets count] < MAX_BEES){
         [self addBeeDude];
     }
-    for(CCSprite *dotDude in _dots){
+    for(DotDude *dotDude in _dots){
         ccColor3B dotColor = {204, 102, 255};
         dotDude.color = dotColor;
+        dotDude.hp = MAX_HP;
     }
     
     // Start new scores
     score = 0;
-    lives = MAX_LIVES;
+    lives = MAX_HP;
     [_hud setStatusString:[NSString stringWithFormat:@"Lives: %i", lives]];
     gameInProgress = YES;
     [self schedule:@selector(nextFrame:)];
@@ -266,12 +263,12 @@ bool gameInProgress;
     CGSize winSize = [[CCDirector sharedDirector] winSize];
     AppController *appD = (AppController *)[[UIApplication sharedApplication] delegate];
     if([appD robotOnline]) center.rotation =  -1 * [appD currentYaw];
-    for (CCSprite *dotDude in _dots) {
+    for (DotDude *dotDude in _dots) {
         dotDude.rotation = -1 * center.rotation;
     }
     if([appD hasResumed]){
-        float red = min(1.0, 2 * (float)(MAX_LIVES - lives)/MAX_LIVES) ;
-        float green = max(0.0, (float)lives/MAX_LIVES);
+        float red = min(1.0, 2 * (float)(MAX_HP - lives)/MAX_HP) ;
+        float green = max(0.0, (float)lives/MAX_HP);
         [RKRGBLEDOutputCommand sendCommandWithRed:red green:green blue:0.0];
         appD.hasResumed = FALSE;
     }
@@ -310,7 +307,7 @@ bool gameInProgress;
             beeDude.contentSize.width * beeDude.scaleX,
             beeDude.contentSize.height * beeDude.scaleY);
         
-        for(CCSprite *dotDude in _dots){
+        for(DotDude *dotDude in _dots){
             CGPoint position = [center convertToWorldSpace:dotDude.position];
             // Relative to center
             CGRect dotDudeRect = CGRectMake(
@@ -320,25 +317,22 @@ bool gameInProgress;
                 dotDude.contentSize.height * dotDude.scaleY
             );
             if (CGRectIntersectsRect(dotDudeRect, beeDudeRect)) {
-                ccColor3B dotColor = {255, 0, 0};
-                dotDude.color =  dotColor;
                 [beeDudesToDelete addObject:beeDude];
                 
-                if(beeDude.visible){
-                    [self createExplosionX:position.x y:position.y];
-                    beeDude.visible = false;
-                    lives--;
-                    [_hud setStatusString:[NSString stringWithFormat:@"Lives: %d", lives+1]];
-                    if(lives<0){
-                        [self unschedule:@selector(nextFrame:)];
-                        gameInProgress = NO;
-                        [self endGame];
-                    }
-                    // Change the color of the ball
-                    float red = min(1.0, 2 * (float)(MAX_LIVES - lives)/MAX_LIVES) ;
-                    float green = max(0.0, (float)lives/MAX_LIVES);
-                    [RKRGBLEDOutputCommand sendCommandWithRed:red green:green blue:0.0];
+                [self createExplosionX:position.x y:position.y];
+                [dotDude setHp:dotDude.hp-1];
+                if(dotDude.hp <= 0){
+                    [self unschedule:@selector(nextFrame:)];
+                    gameInProgress = NO;
+                    [self endGame];
                 }
+                // Change the color of the ball
+                float red = min(1.0, 2 * (float)(MAX_HP - dotDude.hp)/MAX_HP) ;
+                float green = max(0.0, (float)dotDude.hp/MAX_HP);
+                ccColor3B dotColor = {(int)255*red, (int)255*green, 0};
+                dotDude.color = dotColor;
+                NSLog(@"HP %i %d", dotDude.hp, dotColor.r);
+                [RKRGBLEDOutputCommand sendCommandWithRed:red green:green blue:0.0];
                     
             }
             
@@ -452,7 +446,7 @@ bool gameInProgress;
     float newAngle = center.rotation + CC_RADIANS_TO_DEGREES(rotateAngle);
     
     if(!isnan(newAngle)) [center setRotation:newAngle];
-    for(CCNode *dotDude in _dots){
+    for(DotDude *dotDude in _dots){
         dotDude.rotation = -center.rotation;
     }
 
