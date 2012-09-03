@@ -30,6 +30,7 @@ enum GameStatePP {
     NSMutableArray *_targets;
     NSMutableArray *_dots;
     
+    float score;
     HUDLayer * _hud;
     BOOL robotOnline;
     CCParticleSystem *starField;
@@ -37,6 +38,7 @@ enum GameStatePP {
     int  packetCounter;
     int maxDots;
     int radius;
+    int highScore;
     
     UIViewController *viewController;
     enum GameStatePP _state;

@@ -33,6 +33,7 @@ CCNode *center;
 CCSprite *cloud;
 
 float score = 0;
+int bonus = 0;
 int lives;
 int radius;
 bool gameInProgress;
@@ -63,6 +64,9 @@ bool gameInProgress;
 - (id)initWithHUD:(HUDLayer *)hud
 {
     if( (self=[super initWithColor:ccc4(0, 0, 0, 255)] )) {
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        highScore = [prefs integerForKey:@"highScore"];
+        if(!highScore) highScore=0;
         self.tag = 111;
         [[SimpleAudioEngine sharedEngine] playBackgroundMusic:@"dreaming.wav"];
         _hud = hud;
@@ -75,6 +79,7 @@ bool gameInProgress;
         // 91, 150, 239, 255
     
         [_hud setScoreString:[NSString stringWithFormat:@""]];
+        [_hud setHighScoreString:[NSString stringWithFormat:@"High: %i", highScore]];
         CGSize winSize = [[CCDirector sharedDirector] winSize];
         radius = winSize.width * RADIUS_RATIO;
         
@@ -173,7 +178,7 @@ bool gameInProgress;
         self.isTouchEnabled = YES;
         //[_hud showRestartMenu:-1];
         //[self resetGame];
-        [_hud showRestartMenu:(int)score];
+        [_hud showRestartMenu:(int)score+bonus];
     }
     return self;
 }
@@ -256,8 +261,12 @@ bool gameInProgress;
     
     // Start new scores
     score = 0;
+    bonus = 0;
     lives = MAX_HP;
     gameInProgress = YES;
+    [_hud setHighScoreString:[NSString stringWithFormat:@"High: %i", highScore]];
+    
+    
     [self schedule:@selector(nextFrame:)];
 }
 
@@ -279,7 +288,7 @@ bool gameInProgress;
     
     // Update the score
     if(gameInProgress) score += dt*10;
-    [_hud setScoreString:[NSString stringWithFormat:@"Score: %i", (int)score]];
+    [_hud setScoreString:[NSString stringWithFormat:@"Score: %i", (int)score+bonus]];
     int vx = winSize.width/3 + score/3;
     
     
@@ -302,6 +311,7 @@ bool gameInProgress;
         beeDude.position = ccp(beeDude.position.x - vx *dt, beeDude.position.y);
         if(beeDude.position.x < -1 * beeDude.contentSize.width ){
             [beeDudesToDelete addObject:beeDude];
+            bonus++;
         }
         
         CGRect beeDudeRect = CGRectMake(
@@ -392,7 +402,20 @@ bool gameInProgress;
     
     // Delete the beeDudes
     
-    [_hud showRestartMenu:(int)score];
+    [_hud showRestartMenu:(int)score+bonus];
+    
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    int totalScore = score + bonus;
+    highScore = [prefs integerForKey:@"highScore"];
+    if(totalScore > highScore){
+        [prefs setInteger:(int)totalScore forKey:@"highScore"];
+        [_hud setHighScoreString:[NSString stringWithFormat:@"High: %i", (int)totalScore]];
+        highScore = totalScore;
+    }
+    [prefs synchronize];
+
+    
+    
 //    GameOverScene *gameOverScene = [GameOverScene node];
 //    [gameOverScene.layer.label setString:[NSString stringWithFormat:@"Your Score: %i", (int)score]];
 //    [[CCDirector sharedDirector] pushScene:gameOverScene];
@@ -401,12 +424,10 @@ bool gameInProgress;
 
 - (BOOL)ccTouchBegan:(UITouch *)touch withEvent:(UIEvent *)event {
     // Save the position to calculate the angle
-    NSLog(@"ccTouchBegan");
     return YES;
 }
 
 - (void)ccTouchEnded:(UITouch *)touch withEvent:(UIEvent *)event {
-    NSLog(@"ccTouchEnded");
     CGSize winSize = [[CCDirector sharedDirector] winSize];
     
     CGPoint location = [touch locationInView:[touch view]];
@@ -416,7 +437,6 @@ bool gameInProgress;
     }
 }
 -(void)ccTouchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
-    NSLog(@"ccTouchesEnded");
 }
 
 - (void)ccTouchMoved:(UITouch *)touch withEvent:(UIEvent *)event {

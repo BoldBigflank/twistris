@@ -21,8 +21,11 @@
         CGSize winSize = [CCDirector sharedDirector].winSize;
         
         _scoreLabel = [CCLabelTTF labelWithString:@"Score" fontName:@"Arial" fontSize:32];
-        _scoreLabel.position = ccp(winSize.width * 0.15, winSize.height * 0.9);
+        _scoreLabel.position = ccp(winSize.width * 0.2, winSize.height * 0.9);
         [self addChild:_scoreLabel];
+        _highScoreLabel = [CCLabelTTF labelWithString:@"Score" fontName:@"Arial" fontSize:32];
+        _highScoreLabel.position = ccp(winSize.width * 0.80, winSize.height * 0.9);
+        [self addChild:_highScoreLabel];
         
         // Sphero button
         CCMenuItem *spheroMenuItem = [CCMenuItemImage
@@ -53,7 +56,9 @@
 - (void)setScoreString:(NSString *)string {
     _scoreLabel.string = string;
 }
-
+- (void)setHighScoreString:(NSString *)string {
+    _highScoreLabel.string = string;
+}
 - (void)restartTapped:(id)sender {
     // Reload the current scene
 //    CCScene *scene = [HelloWorldLayer scene];
@@ -64,7 +69,7 @@
 }
 
 - (void)showRestartMenu:(int)score {
-    
+    [self removeChild:_startMenu cleanup:YES];
     CGSize winSize = [CCDirector sharedDirector].winSize;
     
     NSString *message;
