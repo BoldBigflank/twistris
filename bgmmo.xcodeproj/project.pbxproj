@@ -207,7 +207,7 @@
 		FA6E55D515F18A4B007A6A54 /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
 		FA6E55D715F18A55007A6A54 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		FA6E55D915F18A5A007A6A54 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
-		FA91B5D415CDCE8200C744B3 /* bgmmo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = bgmmo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FA91B5D415CDCE8200C744B3 /* Twistris.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Twistris.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA91B5D815CDCE8200C744B3 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		FA91B5DA15CDCE8200C744B3 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		FA91B5DC15CDCE8200C744B3 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
@@ -543,7 +543,7 @@
 		FA91B5D515CDCE8200C744B3 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				FA91B5D415CDCE8200C744B3 /* bgmmo.app */,
+				FA91B5D415CDCE8200C744B3 /* Twistris.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1011,7 +1011,7 @@
 			);
 			name = bgmmo;
 			productName = bgmmo;
-			productReference = FA91B5D415CDCE8200C744B3 /* bgmmo.app */;
+			productReference = FA91B5D415CDCE8200C744B3 /* Twistris.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -1277,7 +1277,7 @@
 					"-ObjC",
 					"-lsqlite3",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Twistris;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1307,7 +1307,7 @@
 					"-ObjC",
 					"-lsqlite3",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Twistris;
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
 			};
