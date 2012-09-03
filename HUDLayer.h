@@ -8,9 +8,10 @@
 
 #import "cocos2d.h"
 
+
 @interface HUDLayer : CCLayer {
     CCLabelBMFont * _scoreLabel;
-    
+
     CCMenu *_spheroMenu;
     CCMenu *_startMenu;
 }

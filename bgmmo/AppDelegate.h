@@ -19,6 +19,8 @@
 }
 
 -(void)setupRobotConnection;
+
+@property (nonatomic, retain) UIViewController *viewController;
 @property (nonatomic, retain) UIWindow *window;
 @property (nonatomic) BOOL robotOnline;
 @property (nonatomic) BOOL hasResumed;

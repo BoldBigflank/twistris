@@ -13,6 +13,13 @@
 #import "cocos2d.h"
 #import "HUDLayer.h"
 
+#import "AppDelegate.h"
+
+enum GameStatePP {
+    kGameStatePlaying,
+    kGameStatePaused
+};
+
 // Sphero stuff
 #import "RobotKit/RobotKit.h"
 
@@ -31,6 +38,9 @@
     int maxDots;
     int radius;
     
+    UIViewController *viewController;
+    enum GameStatePP _state;
+    
     CCLabelTTF *_label;   
 }
 
@@ -38,5 +48,7 @@
 +(CCScene *) scene;
 - (id)initWithHUD:(HUDLayer *)hud;
 - (void) resetGame;
+
+@property(nonatomic) enum GameStatePP state;
 
 @end

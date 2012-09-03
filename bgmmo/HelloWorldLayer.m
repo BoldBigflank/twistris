@@ -186,17 +186,24 @@ bool gameInProgress;
     return sg;
 }
 
-- (BOOL)addBeeDude
+- (void)addBeeDude:(CGPoint)position{
+    CCSprite *beeDude = [self addBeeDude];
+    beeDude.position = position;
+}
+
+- (CCSprite *)addBeeDude
 {
     CGSize winSize = [[CCDirector sharedDirector] winSize];
     int minY = winSize.height/2 - radius;
     int actualY = minY + (arc4random() % (2 * radius));
-//    int actualY = minY + (arc4random() % (int)(2/DOT_RATIO))* 4 / DOT_RATIO; // random
     
     CCSprite *beeDude = [CCSprite spriteWithFile: @"square.png"];
+    int spawnX = winSize.width + beeDude.contentSize.width + arc4random() % (int)winSize.width;
+    beeDude.position = ccp( spawnX , actualY );
+
     beeDude.scaleX = (radius * DOT_RATIO) / beeDude.contentSize.width ;
     beeDude.scaleY = (radius * DOT_RATIO) / beeDude.contentSize.height ;
-    
+
     // Give it a cool trail
     CCParticleMeteor *tail = [[CCParticleMeteor alloc] initWithTotalParticles:100];
     tail.texture = [[CCTextureCache sharedTextureCache] addImage:@"square.png"];
@@ -210,10 +217,8 @@ bool gameInProgress;
     tail.lifeVar = 0.675;
     tail.angle = 0;
     tail.gravity = ccp(winSize.width, 0);
-    int spawnX = winSize.width + beeDude.contentSize.width + arc4random() % (int)winSize.width;
     
-    beeDude.position = ccp( spawnX , actualY );
-
+    
     ccColor4F startColor = {0.87f, 0.51f, 0.597f, 1.0f};
     tail.startColor = startColor;
     ccColor4F startColorVar = {0.5f, 0.5f, 0.5f, 1.0f};
@@ -227,7 +232,7 @@ bool gameInProgress;
     [beeDude addChild:tail];
     [self addChild:beeDude];
     [_targets addObject:beeDude];
-    return TRUE;
+    return beeDude;
 }
 
 - (void) resetGame
@@ -340,7 +345,7 @@ bool gameInProgress;
     for(CCSprite *beeDude in beeDudesToDelete){
         [_targets removeObject:beeDude];
         [self removeChild:beeDude cleanup:YES ];
-        [self addBeeDude];
+        while ([_targets count] < MAX_BEES) [self addBeeDude];
     }
     [beeDudesToDelete release];
     
@@ -396,14 +401,27 @@ bool gameInProgress;
 
 - (BOOL)ccTouchBegan:(UITouch *)touch withEvent:(UIEvent *)event {
     // Save the position to calculate the angle
+    NSLog(@"ccTouchBegan");
     return YES;
 }
 
 - (void)ccTouchEnded:(UITouch *)touch withEvent:(UIEvent *)event {
-    // Return the direction of seeker
+    NSLog(@"ccTouchEnded");
+    CGSize winSize = [[CCDirector sharedDirector] winSize];
+    
+    CGPoint location = [touch locationInView:[touch view]];
+    location = [[CCDirector sharedDirector] convertToGL:location];
+    if(location.x > 0.75 * winSize.width){
+        [self addBeeDude:location];
+    }
+}
+-(void)ccTouchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
+    NSLog(@"ccTouchesEnded");
 }
 
 - (void)ccTouchMoved:(UITouch *)touch withEvent:(UIEvent *)event {
+    // ignore touches on the right half of the screen
+    
     if(!gameInProgress) return;
     CGPoint touchLocation = [center convertTouchToNodeSpace:touch];
     

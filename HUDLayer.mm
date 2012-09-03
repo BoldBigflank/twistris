@@ -10,6 +10,8 @@
 #import "HelloWorldLayer.h"
 #import "AppDelegate.h"
 
+@class AppController;
+
 @implementation HUDLayer
 
 - (id)init {
@@ -44,7 +46,6 @@
 }
 
 - (void)spheroButtonTapped:(id)sender {
-    NSLog(@"Sphero button tapped");
     AppController *appD = (AppController *)[[UIApplication sharedApplication] delegate];
     if( [appD robotOnline] == NO ) [appD setupRobotConnection];
 }

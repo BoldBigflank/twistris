@@ -19,6 +19,7 @@
 
 @synthesize window=window_, navController=navController_, director=director_;
 @synthesize robotOnline, currentYaw, hasResumed;
+@synthesize viewController;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -91,7 +92,7 @@
 	
 	// make main window visible
 	[window_ makeKeyAndVisible];
-	
+	[glView setMultipleTouchEnabled:YES];
 	return YES;
 }
 
@@ -264,7 +265,6 @@
         currentYaw = attitudeData.yaw;
     }
 }
-
 
 @end
 
